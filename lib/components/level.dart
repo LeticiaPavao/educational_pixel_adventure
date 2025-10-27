@@ -8,6 +8,7 @@ import 'package:pixel_adventure/components/checkpoint.dart';
 import 'package:pixel_adventure/components/chicken.dart';
 import 'package:pixel_adventure/components/collision_block.dart';
 import 'package:pixel_adventure/components/fruit.dart';
+import 'package:pixel_adventure/components/hud.dart';
 import 'package:pixel_adventure/components/player.dart';
 import 'package:pixel_adventure/components/saw.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
@@ -34,6 +35,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
     _scrollingBackground(); // Fundo animado
     _spawningObjects(); // Objetos e personagens
     _addCollisions(); // Blocos de colisão
+    add(HUD()); // HUD (pontuação, vidas, etc.)
 
     return super.onLoad();
   }

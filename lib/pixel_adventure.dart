@@ -40,6 +40,18 @@ class PixelAdventure extends FlameGame
   bool playSounds = true;
   double soundVolume = 1.0;
 
+  // Pontuação do jogador
+  int score = 0;
+
+  // Número de vidas do jogador
+  int lives = 3;
+
+  int liveEnemy = 3; // Número de vidas do inimigo
+
+  bool isGameOver = false; // Indica se o jogo acabou
+
+  bool isGameWon = false; // Indica se o jogo foi vencido
+
   // Lista com os nomes dos níveis do jogo
   List<String> levelNames = ['Level-01', 'Level-02'];
   int currentLevelIndex = 0; // Índice do nível atual
@@ -72,7 +84,10 @@ class PixelAdventure extends FlameGame
     if (showControls) {
       updateJoystick();
     }
-    super.update(dt);
+
+    checkGameStatus(); // Verifica o status do jogo
+
+    super.update(dt); // Chama o método update da superclasse
   }
 
   // Método para adicionar o joystick na tela
@@ -117,6 +132,42 @@ class PixelAdventure extends FlameGame
     }
   }
 
+  // Adiciona pontos à pontuação do jogador
+  void addScore(int points) {
+    score += points; // Adiciona os pontos
+
+    if (score < 0) {
+      score = 0; // Garante que a pontuação não fique negativa
+    }
+  }
+
+  void loseLife() {
+    if (lives > 0) {
+      lives -= 1; // Remove uma vida
+    }
+
+    if (lives < 0) {
+      lives = 0; // Garante que as vidas não fiquem negativas
+    }
+  }
+
+  void loseLifeEnemy() {
+    if (liveEnemy > 0) {
+      liveEnemy -= 1; // Remove uma vida
+    }
+
+    if (liveEnemy < 0) {
+      liveEnemy = 0; // Garante que as vidas não fiquem negativas
+    }
+  }
+
+  // Verifica o status do jogo (game over ou vitória)
+  void checkGameStatus() {
+    if (lives <= 0 && !isGameOver) {
+      isGameOver = true; // O jogo acabou
+    }
+  }
+
   // Carrega o próximo nível do jogo
   void loadNextLevel() {
     // Remove todos os componentes do nível atual
@@ -127,10 +178,26 @@ class PixelAdventure extends FlameGame
       currentLevelIndex++; // Vai para o próximo nível
       _loadLevel();
     } else {
-      // Se não há mais níveis, volta para o primeiro
+      if (!isGameWon) {
+        isGameWon = true; // Marca o jogo como vencido
+      }
+      // Se não houver mais níveis, reinicia o jogo
       currentLevelIndex = 0;
       _loadLevel();
     }
+  }
+
+  void resetGame() {
+    // Reseta variáveis do jogo
+    score = 0;
+    lives = 3;
+    liveEnemy = 3;
+    isGameOver = false;
+    isGameWon = false;
+    currentLevelIndex = 0;
+
+    // Carrega o nível inicial novamente
+    _loadLevel();
   }
 
   // Método privado para carregar um nível

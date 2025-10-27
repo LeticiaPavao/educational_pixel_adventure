@@ -21,6 +21,8 @@ class Chicken extends SpriteAnimationGroupComponent
   final double offNeg; // Distância para esquerda que a galinha pode patrulhar
   final double offPos; // Distância para direita que a galinha pode patrulhar
 
+  final int hitsToDie = 3; // Número de hits necessários para derrotar a galinha
+
   Chicken({
     super.position,
     super.size,
@@ -43,6 +45,9 @@ class Chicken extends SpriteAnimationGroupComponent
   double moveDirection = 1; // Direção atual do movimento (-1 = esq, 1 = dir)
   double targetDirection = -1; // Direção desejada do movimento
   bool gotStomped = false; // Se a galinha foi derrotada
+
+  // Contadores de frames e hits
+  int enemyHits = 0; // Contador de hits recebidos
 
   // Referências e animações
   late final Player player; // Referência ao jogador
@@ -173,13 +178,26 @@ class Chicken extends SpriteAnimationGroupComponent
         FlameAudio.play('bounce.wav',
             volume: game.soundVolume); // Som de quique
       }
-      gotStomped = true; // Marca como derrotada
-      current = State.hit; // Muda para animação de hit
-      player.velocity.y = -_bounceHeight; // Faz o jogador pular
 
-      // Aguarda a animação de hit terminar
-      await animationTicker?.completed;
-      removeFromParent(); // Remove a galinha do jogo
+      enemyHits++; // Incrementa o contador de hits) {
+
+      if (enemyHits >= hitsToDie) {
+        gotStomped = true; // Marca como derrotada
+        current = State.hit; // Muda para animação de hit
+        player.velocity.y = -_bounceHeight; // Faz o jogador pular
+
+        // Aguarda a animação de hit terminar
+        await animationTicker?.completed;
+        removeFromParent(); // Remove a galinha do jogo
+      } else {
+        current = State.hit; // Muda para animação de hit
+        player.velocity.y = -_bounceHeight; // Faz o jogador pular
+
+        // Aguarda a animação de hit terminar
+        await animationTicker?.completed;
+        animationTicker?.reset();
+        current = State.idle; // Volta para animação idle
+      }
     } else {
       // Se o jogador foi atingido lateralmente ou por baixo
       player.collidedwithEnemy(); // Causa dano ao jogador
