@@ -56,6 +56,9 @@ class PixelAdventure extends FlameGame
   List<String> levelNames = ['Level-01','Level-07'];
   int currentLevelIndex = 0; // Índice do nível atual
 
+  bool isLoadingLevel = false; // Indica se um nível está sendo carregado
+  Level? currentLevel;
+
   // Método chamado quando o jogo é carregado
   @override
   FutureOr<void> onLoad() async {
@@ -79,14 +82,12 @@ class PixelAdventure extends FlameGame
   @override
   void update(double dt) {
     // dt = delta time (tempo desde o último frame)
-
     // Se os controles estiverem ativos, atualiza o joystick
     if (showControls) {
       updateJoystick();
     }
 
     checkGameStatus(); // Verifica o status do jogo
-
     super.update(dt); // Chama o método update da superclasse
   }
 
@@ -170,8 +171,18 @@ class PixelAdventure extends FlameGame
 
   // Carrega o próximo nível do jogo
   void loadNextLevel() {
-    // Remove todos os componentes do nível atual
-    removeWhere((component) => component is Level);
+    if(isLoadingLevel) return;
+
+    isLoadingLevel = true;
+
+    if(currentLevel != null) {
+      currentLevel!.removeFromParent();
+      currentLevel = null;
+    }
+
+    if(cam.parent != null) {
+      cam.removeFromParent();
+    }
 
     // Verifica se há mais níveis
     if (currentLevelIndex < levelNames.length - 1) {
@@ -196,6 +207,14 @@ class PixelAdventure extends FlameGame
     isGameWon = false;
     currentLevelIndex = 0;
 
+    if(currentLevel != null) {
+      currentLevel!.removeFromParent();
+      currentLevel = null;
+    }
+    if(cam.parent != null) {
+      cam.removeFromParent();
+    }
+
     // Carrega o nível inicial novamente
     _loadLevel();
   }
@@ -203,12 +222,14 @@ class PixelAdventure extends FlameGame
   // Método privado para carregar um nível
   void _loadLevel() {
     // Adiciona um pequeno delay antes de carregar o nível
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       // Cria o mundo/nível com o jogador e nome do nível
       Level world = Level(
         player: player,
         levelName: levelNames[currentLevelIndex],
       );
+
+      currentLevel = world;
 
       // Configura a câmera com resolução fixa
       cam = CameraComponent.withFixedResolution(
@@ -221,7 +242,61 @@ class PixelAdventure extends FlameGame
 
       // Adiciona a câmera e o mundo ao jogo
       addAll([cam, world]);
+
+      isLoadingLevel = false;
     });
+  }
+
+//testar esse depois, no lugar de loadNextLevel(), usar: loadNextLevelOptimized();
+  void loadNextLevelOptions() {
+    if(isLoadingLevel) return;
+
+    isLoadingLevel = true;
+
+    String nextLevelName;
+
+    if(currentLevelIndex < levelNames.length - 1) {
+      nextLevelName = levelNames[currentLevelIndex + 1];
+    } else {
+      nextLevelName = levelNames[0];
+    }
+
+    Future.microtask((){
+      if(currentLevel != null) {
+        remove(currentLevel!);
+      }
+      if(cam.parent != null) {
+        remove(cam);
+      }
+
+      Level newWorld = Level(
+        player: player,
+        levelName: nextLevelName,
+      );
+
+      currentLevel = newWorld;
+
+      CameraComponent newCam = CameraComponent.withFixedResolution(
+        world: newWorld,
+        width: 640,
+        height: 360,
+      );
+      newCam.viewfinder.anchor = Anchor.topLeft;
+
+      addAll([newCam, newWorld]);
+
+      if(currentLevelIndex < levelNames.length - 1) {
+        currentLevelIndex++;
+      } else {
+        currentLevelIndex = 0;
+        if (!isGameWon) {
+          isGameWon = true;
+        }
+      }
+
+      isLoadingLevel = false;
+
+    });   
   }
 }
 
