@@ -14,6 +14,8 @@ import 'package:pixel_adventure/components/fruit.dart';
 import 'package:pixel_adventure/components/saw.dart';
 import 'package:pixel_adventure/components/utils.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
+import 'package:pixel_adventure/components/coin.dart';
+import 'package:pixel_adventure/components/frogger.dart';
 
 // Enum que define todos os estados possíveis do jogador
 enum PlayerState {
@@ -156,6 +158,13 @@ class Player extends SpriteAnimationGroupComponent
       }
       if (other is Checkpoint) {
         _reachedCheckpoint(); // Ativa checkpoint
+      }
+      if (other is Frogger) {
+        other.collidedWithPlayer(); // Interage com Frogger
+      }
+      if (other is Coin) {
+        other.collidedWithPlayer(); // Coleta moeda
+        game.addScore(5); // Adiciona 5 pontos
       }
     }
     super.onCollisionStart(intersectionPoints, other);
