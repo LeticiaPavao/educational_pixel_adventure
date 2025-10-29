@@ -248,56 +248,56 @@ class PixelAdventure extends FlameGame
   }
 
 //testar esse depois, no lugar de loadNextLevel(), usar: loadNextLevelOptimized();
-  void loadNextLevelOptions() {
-    if(isLoadingLevel) return;
+  // void loadNextLevelOptions() {
+  //   if(isLoadingLevel) return;
 
-    isLoadingLevel = true;
+  //   isLoadingLevel = true;
 
-    String nextLevelName;
+  //   String nextLevelName;
 
-    if(currentLevelIndex < levelNames.length - 1) {
-      nextLevelName = levelNames[currentLevelIndex + 1];
-    } else {
-      nextLevelName = levelNames[0];
-    }
+  //   if(currentLevelIndex < levelNames.length - 1) {
+  //     nextLevelName = levelNames[currentLevelIndex + 1];
+  //   } else {
+  //     nextLevelName = levelNames[0];
+  //   }
 
-    Future.microtask((){
-      if(currentLevel != null) {
-        remove(currentLevel!);
-      }
-      if(cam.parent != null) {
-        remove(cam);
-      }
+  //   Future.microtask((){
+  //     if(currentLevel != null) {
+  //       remove(currentLevel!);
+  //     }
+  //     if(cam.parent != null) {
+  //       remove(cam);
+  //     }
 
-      Level newWorld = Level(
-        player: player,
-        levelName: nextLevelName,
-      );
+  //     Level newWorld = Level(
+  //       player: player,
+  //       levelName: nextLevelName,
+  //     );
 
-      currentLevel = newWorld;
+  //     currentLevel = newWorld;
 
-      CameraComponent newCam = CameraComponent.withFixedResolution(
-        world: newWorld,
-        width: 640,
-        height: 360,
-      );
-      newCam.viewfinder.anchor = Anchor.topLeft;
+  //     CameraComponent newCam = CameraComponent.withFixedResolution(
+  //       world: newWorld,
+  //       width: 640,
+  //       height: 360,
+  //     );
+  //     newCam.viewfinder.anchor = Anchor.topLeft;
 
-      addAll([newCam, newWorld]);
+  //     addAll([newCam, newWorld]);
 
-      if(currentLevelIndex < levelNames.length - 1) {
-        currentLevelIndex++;
-      } else {
-        currentLevelIndex = 0;
-        if (!isGameWon) {
-          isGameWon = true;
-        }
-      }
+  //     if(currentLevelIndex < levelNames.length - 1) {
+  //       currentLevelIndex++;
+  //     } else {
+  //       currentLevelIndex = 0;
+  //       if (!isGameWon) {
+  //         isGameWon = true;
+  //       }
+  //     }
 
-      isLoadingLevel = false;
+  //     isLoadingLevel = false;
 
-    });   
-  }
+  //   });   
+  // }
 }
 
 /*
