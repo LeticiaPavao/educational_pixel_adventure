@@ -8,6 +8,9 @@ import 'package:flutter/services.dart'; // Para input do teclado
 import 'package:pixel_adventure/components/bat.dart';
 import 'package:pixel_adventure/components/checkpoint.dart';
 import 'package:pixel_adventure/components/chicken.dart';
+import 'package:pixel_adventure/components/rino.dart';
+import 'package:pixel_adventure/components/gold.dart';
+import 'package:pixel_adventure/components/goose.dart';
 import 'package:pixel_adventure/components/collision_block.dart';
 import 'package:pixel_adventure/components/custom_hitbox.dart';
 import 'package:pixel_adventure/components/fruit.dart';
@@ -32,9 +35,12 @@ enum PlayerState {
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
   String character; // Tipo do personagem (Ninja Frog, Mask Dude, etc.)
+
+  Vector2 spawnPoint = Vector2.zero();
+
   Player({
     position,
-    this.character = 'Ninja Frog', // Personagem padrão
+    this.character = 'Mask Dude', // Personagem padrão
   }) : super(position: position);
 
   // Configurações de animação
@@ -63,7 +69,7 @@ class Player extends SpriteAnimationGroupComponent
   bool hasJumped = false; // Se o jogador apertou para pular
   bool gotHit = false; // Se acabou de tomar dano
   bool reachedCheckpoint = false; // Se atingiu um checkpoint
-  int  hits = 0; 
+  int hits = 0;
 
   final int hitsToDie = 3; // Número de hits necessários para derrotar o inimigo
 
@@ -86,7 +92,8 @@ class Player extends SpriteAnimationGroupComponent
     _loadAllAnimations(); // Carrega todas as animações
     // debugMode = true;
 
-    startingPosition = Vector2(position.x, position.y); // Salva posição inicial
+    startingPosition = Vector2(position.x, position.y);
+    spawnPoint = Vector2(startingPosition.x, startingPosition.y); // Copia o valor correto
 
     // Adiciona a hitbox de colisão retangular
     add(RectangleHitbox(
@@ -117,7 +124,7 @@ class Player extends SpriteAnimationGroupComponent
     super.update(dt);
   }
 
-  // Manipula input do teclado 
+  // Manipula input do teclado
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalMovement = 0;
@@ -144,7 +151,7 @@ class Player extends SpriteAnimationGroupComponent
     if (!reachedCheckpoint) {
       if (other is Fruit) {
         other.collidedWithPlayer(); // Coleta fruta
-        game.addScore(1); // Adiciona 10 pontos
+        game.addScore(1); // Adiciona 1 ponto
       }
       if (other is Saw) {
         game.loseLife(); // Perde vida
@@ -165,6 +172,16 @@ class Player extends SpriteAnimationGroupComponent
       if (other is Coin) {
         other.collidedWithPlayer(); // Coleta moeda
         game.addScore(5); // Adiciona 5 pontos
+      }
+      if (other is Rino) {
+        other.collidedWithPlayer(); // Interage com rinoceronte
+      }
+      if (other is Goose) {
+        other.collidedWithPlayer(); // Interage com ganso
+      }
+      if (other is Gold) {
+        other.collidedWithPlayer(); // Coleta ouro
+        game.addScore(20); // Adiciona 20 pontos
       }
     }
     super.onCollisionStart(intersectionPoints, other);
@@ -370,22 +387,28 @@ class Player extends SpriteAnimationGroupComponent
     await animationTicker?.completed;
     animationTicker?.reset();
 
+    position = Vector2(startingPosition.x, startingPosition.y); // Move para spawn
+
     // Prepara para aparecer
-    scale.x = 1; // Garante que está virado para direita
-    position = startingPosition - Vector2.all(32); // Posição temporária
+    scale = Vector2.all(1);
+    velocity = Vector2.zero();
+    horizontalMovement = 0;
+    hasJumped = false;
+    isOnGround = false;
+
     current = PlayerState.appearing; // Animação de aparecer
 
     // Aguarda animação de aparecer terminar
     await animationTicker?.completed;
     animationTicker?.reset();
 
-    // Retorna à posição inicial
-    velocity = Vector2.zero();
-    position = startingPosition;
-    _updatePlayerState();
+    current = PlayerState.idle; // Volta para animação idle
 
     // Permite movimento novamente após um delay
-    Future.delayed(canMoveDuration, () => gotHit = false);
+    Future.delayed(canMoveDuration, () {
+      gotHit = false;
+      _updatePlayerState();
+    });
   }
 
   // Chamado quando atinge um checkpoint
@@ -418,15 +441,14 @@ class Player extends SpriteAnimationGroupComponent
 
   // Chamado quando colide com inimigo (dano)
   void collidedwithEnemy() {
-    hits ++;
+    hits++;
     if (hits >= hitsToDie) {
       game.loseLife(); // Perde vida
-      hits = 0; // Reseta contador de hits
+      hits = 0;
       _respawn();
     } else {
-     _playHitAnimation(); // Toca animação de hit
+      _playHitAnimation(); // Toca animação de hit
     }
-
   }
 }
 

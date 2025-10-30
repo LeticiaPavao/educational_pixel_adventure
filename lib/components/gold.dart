@@ -12,12 +12,12 @@ import 'package:pixel_adventure/pixel_adventure.dart';
 // Mixins:
 // - HasGameRef<PixelAdventure>: permite acessar o jogo principal
 // - CollisionCallbacks: permite detectar colisões com o jogador
-class Fruit extends SpriteAnimationComponent
+class Gold extends SpriteAnimationComponent
     with HasGameRef<PixelAdventure>, CollisionCallbacks {
-  final String fruit; // Tipo da fruta (Apple, Banana, Cherry, etc.)
+  final String gold; // Tipo da fruta (Apple, Banana, Cherry, etc.)
 
-  Fruit({
-    this.fruit = 'Apple', // Valor padrão: Maçã
+  Gold({
+    this.gold = 'gold', // Valor padrão: Maçã
     position,
     size,
   }) : super(
@@ -41,10 +41,11 @@ class Fruit extends SpriteAnimationComponent
 
   // Método chamado quando a fruta é carregada no jogo
   @override
-  FutureOr<void> onLoad() async {
+  FutureOr<void> onLoad() {
     // debugMode = true;
 
-    priority = -1; // Prioridade de renderização (renderiza antes dos personagens)
+    priority =
+        -1; // Prioridade de renderização (renderiza antes dos personagens)
 
     // Adiciona uma hitbox retangular para detecção de colisão
     add(
@@ -56,16 +57,14 @@ class Fruit extends SpriteAnimationComponent
       ),
     );
 
-    await game.images.load('Items/Fruits/$fruit.png');
-
     // Define a animação inicial da fruta (flutuando/brilhando)
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache(
-          'Items/Fruits/$fruit.png'), // Carrega a spritesheet da fruta
+          'Items/Collect/$Gold.png'), // Carrega a spritesheet da fruta
       SpriteAnimationData.sequenced(
         amount: 17, // 17 frames na animação
         stepTime: stepTime, // Cada frame dura 0.05 segundos
-        textureSize: Vector2.all(32), // Cada frame tem 32x32 pixels
+        textureSize: Vector2.all(128), // Cada frame tem 32x32 pixels
       ),
     );
     return super.onLoad();
@@ -82,17 +81,15 @@ class Fruit extends SpriteAnimationComponent
         FlameAudio.play('collect_fruit.wav', volume: game.soundVolume);
       }
 
-       await game.images.load('Items/Fruits/Collected.png');
-
       // Muda para a animação de coleta (partículas/efeito visual)
       animation = SpriteAnimation.fromFrameData(
         game.images
-            .fromCache('Items/Fruits/Collected.png'), // Spritesheet de coleta
+            .fromCache('Items/Collect/Collected.png'), // Spritesheet de coleta
         SpriteAnimationData.sequenced(
           amount: 6, // 6 frames na animação de coleta
           stepTime: stepTime,
           textureSize: Vector2.all(32),
-          loop: false, // Não repete - executa apenas uma vez fruit.png
+          loop: false, // Não repete - executa apenas uma vez
         ),
       );
 

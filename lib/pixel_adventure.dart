@@ -53,7 +53,7 @@ class PixelAdventure extends FlameGame
   bool isGameWon = false; // Indica se o jogo foi vencido
 
   // Lista com os nomes dos níveis do jogo
-  List<String> levelNames = ['Level-01', 'Level-07'];
+  List<String> levelNames = ['Level-01','Level-03','Level-07'];
   int currentLevelIndex = 0; // Índice do nível atual
 
   bool isLoadingLevel = false; // Indica se um nível está sendo carregado
@@ -143,13 +143,17 @@ class PixelAdventure extends FlameGame
   }
 
   void loseLife() {
-    if (lives > 0) {
+    if (lives > 0 && !isGameOver) {
       lives -= 1; // Remove uma vida
     }
 
-    if (lives < 0) {
-      lives = 0; // Garante que as vidas não fiquem negativas
+    if (lives <= 0) {
+      lives = 0; // Garante que as vidas não fiquem negativas 
+
+      checkGameStatus();
     }
+
+    
   }
 
   void loseLifeEnemy() {
@@ -165,8 +169,18 @@ class PixelAdventure extends FlameGame
   // Verifica o status do jogo (game over ou vitória)
   void checkGameStatus() {
     if (lives <= 0 && !isGameOver) {
-      isGameOver = true; // O jogo acabou
+      isGameOver = true; 
+      _showGameOver();
     }
+  }
+
+  void _showGameOver() async {
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    resetGame();
   }
 
   // Carrega o próximo nível do jogo
@@ -202,8 +216,7 @@ class PixelAdventure extends FlameGame
       try {
         _loadNewLevel();
       } catch (e) {
-        print('Erro ao carregar nível: $e');
-        // Em caso de erro, volta para o nível atual
+        
         _revertToCurrentLevel();
       }
     });
@@ -249,9 +262,6 @@ class PixelAdventure extends FlameGame
 
 // Reverte para o nível atual em caso de erro
   void _revertToCurrentLevel() {
-    print('Revertendo para nível atual: ${levelNames[currentLevelIndex]}');
-
-    // Se estava tentando carregar próximo nível, volta ao anterior
     if (currentLevelIndex > 0) {
       currentLevelIndex--;
     }
@@ -316,58 +326,6 @@ class PixelAdventure extends FlameGame
       isLoadingLevel = false;
     });
   }
-
-//testar esse depois, no lugar de loadNextLevel(), usar: loadNextLevelOptimized();
-  // void loadNextLevelOptions() {
-  //   if(isLoadingLevel) return;
-
-  //   isLoadingLevel = true;
-
-  //   String nextLevelName;
-
-  //   if(currentLevelIndex < levelNames.length - 1) {
-  //     nextLevelName = levelNames[currentLevelIndex + 1];
-  //   } else {
-  //     nextLevelName = levelNames[0];
-  //   }
-
-  //   Future.microtask((){
-  //     if(currentLevel != null) {
-  //       remove(currentLevel!);
-  //     }
-  //     if(cam.parent != null) {
-  //       remove(cam);
-  //     }
-
-  //     Level newWorld = Level(
-  //       player: player,
-  //       levelName: nextLevelName,
-  //     );
-
-  //     currentLevel = newWorld;
-
-  //     CameraComponent newCam = CameraComponent.withFixedResolution(
-  //       world: newWorld,
-  //       width: 640,
-  //       height: 360,
-  //     );
-  //     newCam.viewfinder.anchor = Anchor.topLeft;
-
-  //     addAll([newCam, newWorld]);
-
-  //     if(currentLevelIndex < levelNames.length - 1) {
-  //       currentLevelIndex++;
-  //     } else {
-  //       currentLevelIndex = 0;
-  //       if (!isGameWon) {
-  //         isGameWon = true;
-  //       }
-  //     }
-
-  //     isLoadingLevel = false;
-
-  //   });
-  // }
 }
 
 /*

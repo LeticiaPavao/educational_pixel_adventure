@@ -117,8 +117,12 @@ class HUD extends Component with HasGameRef<PixelAdventure> {
 
     if (gameRef.isGameOver) {
       gameStatusText.text = 'LOSER!';
+      gameStatusText.position = Vector2(gameRef.size.x / 2, gameRef.size.y / 2);
+      gameStatusText.anchor = Anchor.center;
     } else if (gameRef.isGameWon) {
       gameStatusText.text = 'HERO!';
+      gameStatusText.position = Vector2(gameRef.size.x / 2, gameRef.size.y / 2);
+      gameStatusText.anchor = Anchor.center;
     } else {
       gameStatusText.text = '';
     }

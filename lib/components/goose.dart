@@ -11,19 +11,17 @@ import 'package:pixel_adventure/pixel_adventure.dart';
 // Enum que define os estados possíveis da galinha
 enum State { idle, run, hit }
 
-// Classe que representa o inimigo Sapo no jogo
+// Classe que representa o inimigo Galinha no jogo
 // Herda de SpriteAnimationGroupComponent para ter múltiplas animações
 // Mixins:
 // - HasGameRef<PixelAdventure>: permite acessar o jogo principal
 // - CollisionCallbacks: permite detectar colisões
-class Frogger extends SpriteAnimationGroupComponent
+class Goose extends SpriteAnimationGroupComponent
     with HasGameRef<PixelAdventure>, CollisionCallbacks {
   final double offNeg; // Distância para esquerda que a galinha pode patrulhar
   final double offPos; // Distância para direita que a galinha pode patrulhar
 
-  final int hitsToDie = 3;
-
-  Frogger({
+  Goose({
     super.position,
     super.size,
     this.offNeg = 0,
@@ -32,11 +30,13 @@ class Frogger extends SpriteAnimationGroupComponent
 
   // Constantes do jogo
   static const stepTime = 0.05; // Tempo entre frames das animações
-  static const tileSize = 16; // Tamanho de cada tile no jogo
+  static const tileSize = 36; // Tamanho de cada tile no jogo
   static const runSpeed = 80; // Velocidade de corrida da galinha
   static const _bounceHeight =
       260.0; // Altura do pulo do jogador ao pular na galinha
-  final textureSize = Vector2(480, 128); // Tamanho das texturas da galinha
+  final textureSize = Vector2(32, 32); // Tamanho das texturas da galinha
+
+  final int hitsToDie = 3;
 
   // Variáveis de movimento e estado
   Vector2 velocity = Vector2.zero(); // Velocidade atual (x, y)
@@ -56,7 +56,7 @@ class Frogger extends SpriteAnimationGroupComponent
 
   // Método chamado quando a galinha é carregada no jogo
   @override
-  FutureOr<void> onLoad(){
+  FutureOr<void> onLoad() {
     // debugMode = true;
 
     player = game.player; // Obtém referência ao jogador do jogo principal
@@ -88,9 +88,10 @@ class Frogger extends SpriteAnimationGroupComponent
 
   // Carrega todas as animações da galinha
   void _loadAllAnimations() {
-    _idleAnimation = _spriteAnimation('Idle', 13); // 13 frames parado
-    _runAnimation = _spriteAnimation('Run', 14); // 14 frames correndo
-    _hitAnimation = _spriteAnimation('Hit', 4) // 15 frames sendo derrotada
+    _idleAnimation = _spriteAnimation('Idle', 2); // 3 frames parado
+    _runAnimation = _spriteAnimation('Run', 4); // 4 frames correndo
+    _hitAnimation = _spriteAnimation('Hit', 4) // 5 frames sendo derrotada
+
       ..loop = false; // Não repete - executa apenas uma vez
 
     // Mapeia cada estado para sua animação correspondente
@@ -105,10 +106,8 @@ class Frogger extends SpriteAnimationGroupComponent
 
   // Método auxiliar para criar animações a partir de spritesheets
   SpriteAnimation _spriteAnimation(String state, int amount) {
-
     return SpriteAnimation.fromFrameData(
-      game.images.fromCache(
-          'Enemies/Frogger/$state.png'), // Caminho da textura
+      game.images.fromCache('Enemies/Goose/$state.png'), // Caminho da textura
       SpriteAnimationData.sequenced(
         amount: amount, // Número de frames
         stepTime: stepTime, // Tempo entre frames
@@ -130,13 +129,13 @@ class Frogger extends SpriteAnimationGroupComponent
 
     // Calcula offsets baseados na direção que estão virados
     double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
-    double FroggerOffset = (scale.x > 0) ? 0 : -width;
+    double chickenOffset = (scale.x > 0) ? 0 : -width;
 
     // Se o jogador está no alcance, persegue ele
     if (playerInRange()) {
       // Define direção alvo baseado na posição do jogador
       targetDirection =
-          (player.x + playerOffset < position.x + FroggerOffset) ? -1 : 1;
+          (player.x + playerOffset < position.x + chickenOffset) ? -1 : 1;
       velocity.x = targetDirection * runSpeed; // Move na direção do jogador
     }
 
@@ -178,7 +177,7 @@ class Frogger extends SpriteAnimationGroupComponent
         FlameAudio.play('bounce.wav',
             volume: game.soundVolume); // Som de quique
       }
-       enemyHits++; // Incrementa o contador de hits) {
+      enemyHits++; // Incrementa o contador de hits) {
 
       if (enemyHits >= hitsToDie) {
         gotStomped = true; // Marca como derrotada
