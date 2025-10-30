@@ -5,6 +5,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart'; // Para input do teclado
+import 'package:pixel_adventure/components/bat.dart';
 import 'package:pixel_adventure/components/checkpoint.dart';
 import 'package:pixel_adventure/components/chicken.dart';
 import 'package:pixel_adventure/components/collision_block.dart';
@@ -13,6 +14,8 @@ import 'package:pixel_adventure/components/fruit.dart';
 import 'package:pixel_adventure/components/saw.dart';
 import 'package:pixel_adventure/components/utils.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
+import 'package:pixel_adventure/components/coin.dart';
+import 'package:pixel_adventure/components/frogger.dart';
 
 // Enum que define todos os estados possíveis do jogador
 enum PlayerState {
@@ -60,6 +63,9 @@ class Player extends SpriteAnimationGroupComponent
   bool hasJumped = false; // Se o jogador apertou para pular
   bool gotHit = false; // Se acabou de tomar dano
   bool reachedCheckpoint = false; // Se atingiu um checkpoint
+  int  hits = 0; 
+
+  final int hitsToDie = 3; // Número de hits necessários para derrotar o inimigo
 
   List<CollisionBlock> collisionBlocks = []; // Blocos de colisão do nível
 
@@ -111,7 +117,7 @@ class Player extends SpriteAnimationGroupComponent
     super.update(dt);
   }
 
-  // Manipula input do teclado
+  // Manipula input do teclado 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalMovement = 0;
@@ -136,12 +142,54 @@ class Player extends SpriteAnimationGroupComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     if (!reachedCheckpoint) {
-      if (other is Fruit) other.collidedWithPlayer(); // Coleta fruta
-      if (other is Saw) _respawn(); // Morre para serra
-      if (other is Chicken) other.collidedWithPlayer(); // Interage com galinha
-      if (other is Checkpoint) _reachedCheckpoint(); // Ativa checkpoint
+      if (other is Fruit) {
+        other.collidedWithPlayer(); // Coleta fruta
+        game.addScore(1); // Adiciona 10 pontos
+      }
+      if (other is Saw) {
+        game.loseLife(); // Perde vida
+        _respawn(); // Morre para serra
+      }
+      if (other is Chicken) {
+        other.collidedWithPlayer(); // Interage com galinha
+      }
+      if (other is Bat) {
+        other.collidedWithPlayer(); // Interage com morcego
+      }
+      if (other is Checkpoint) {
+        _reachedCheckpoint(); // Ativa checkpoint
+      }
+      if (other is Frogger) {
+        other.collidedWithPlayer(); // Interage com Frogger
+      }
+      if (other is Coin) {
+        other.collidedWithPlayer(); // Coleta moeda
+        game.addScore(5); // Adiciona 5 pontos
+      }
     }
     super.onCollisionStart(intersectionPoints, other);
+  }
+
+  // Método para tocar a animação de hit - CORRIGIDO
+  Future<void> _playHitAnimation() async {
+    if (game.playSounds) {
+      FlameAudio.play('hit.wav', volume: game.soundVolume * 0.5);
+    }
+
+    // Salva o estado atual do jogador
+    final previousState = current;
+
+    // Muda para estado de hit (usa a animação de 7 frames sem loop)
+    current = PlayerState.hit;
+
+    // Aguarda a animação de hit completar
+    await animationTicker?.completed;
+
+    // Reseta o animationTicker para poder usar a animação novamente
+    animationTicker?.reset();
+
+    // Volta para o estado anterior
+    current = previousState;
   }
 
   // Carrega todas as animações do personagem
@@ -370,7 +418,15 @@ class Player extends SpriteAnimationGroupComponent
 
   // Chamado quando colide com inimigo (dano)
   void collidedwithEnemy() {
-    _respawn();
+    hits ++;
+    if (hits >= hitsToDie) {
+      game.loseLife(); // Perde vida
+      hits = 0; // Reseta contador de hits
+      _respawn();
+    } else {
+     _playHitAnimation(); // Toca animação de hit
+    }
+
   }
 }
 

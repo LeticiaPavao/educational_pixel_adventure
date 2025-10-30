@@ -84,3 +84,4 @@ class BackgroundTile extends ParallaxComponent {
     O fundo é a folha de baixo, o personagem é a folha de cima
     Cada uma pode se mover em velocidades diferentes
 */
+
