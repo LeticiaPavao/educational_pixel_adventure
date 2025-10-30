@@ -35,6 +35,9 @@ enum PlayerState {
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
   String character; // Tipo do personagem (Ninja Frog, Mask Dude, etc.)
+
+  Vector2 spawnPoint = Vector2.zero();
+
   Player({
     position,
     this.character = 'Mask Dude', // Personagem padrão
@@ -66,7 +69,7 @@ class Player extends SpriteAnimationGroupComponent
   bool hasJumped = false; // Se o jogador apertou para pular
   bool gotHit = false; // Se acabou de tomar dano
   bool reachedCheckpoint = false; // Se atingiu um checkpoint
-  int  hits = 0; 
+  int hits = 0;
 
   final int hitsToDie = 3; // Número de hits necessários para derrotar o inimigo
 
@@ -89,7 +92,8 @@ class Player extends SpriteAnimationGroupComponent
     _loadAllAnimations(); // Carrega todas as animações
     // debugMode = true;
 
-    startingPosition = Vector2(position.x, position.y); // Salva posição inicial
+    startingPosition = Vector2(position.x, position.y);
+    spawnPoint = Vector2(startingPosition.x, startingPosition.y); // Copia o valor correto
 
     // Adiciona a hitbox de colisão retangular
     add(RectangleHitbox(
@@ -120,7 +124,7 @@ class Player extends SpriteAnimationGroupComponent
     super.update(dt);
   }
 
-  // Manipula input do teclado 
+  // Manipula input do teclado
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalMovement = 0;
@@ -383,22 +387,28 @@ class Player extends SpriteAnimationGroupComponent
     await animationTicker?.completed;
     animationTicker?.reset();
 
+    position = Vector2(startingPosition.x, startingPosition.y); // Move para spawn
+
     // Prepara para aparecer
-    scale.x = 1; // Garante que está virado para direita
-    position = startingPosition - Vector2.all(32); // Posição temporária
+    scale = Vector2.all(1);
+    velocity = Vector2.zero();
+    horizontalMovement = 0;
+    hasJumped = false;
+    isOnGround = false;
+
     current = PlayerState.appearing; // Animação de aparecer
 
     // Aguarda animação de aparecer terminar
     await animationTicker?.completed;
     animationTicker?.reset();
 
-    // Retorna à posição inicial
-    velocity = Vector2.zero();
-    position = startingPosition;
-    _updatePlayerState();
+    current = PlayerState.idle; // Volta para animação idle
 
     // Permite movimento novamente após um delay
-    Future.delayed(canMoveDuration, () => gotHit = false);
+    Future.delayed(canMoveDuration, () {
+      gotHit = false;
+      _updatePlayerState();
+    });
   }
 
   // Chamado quando atinge um checkpoint
@@ -431,15 +441,14 @@ class Player extends SpriteAnimationGroupComponent
 
   // Chamado quando colide com inimigo (dano)
   void collidedwithEnemy() {
-    hits ++;
+    hits++;
     if (hits >= hitsToDie) {
       game.loseLife(); // Perde vida
-      hits = 0; // Reseta contador de hits
+      hits = 0;
       _respawn();
     } else {
-     _playHitAnimation(); // Toca animação de hit
+      _playHitAnimation(); // Toca animação de hit
     }
-
   }
 }
 

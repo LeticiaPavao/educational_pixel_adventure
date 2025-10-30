@@ -17,7 +17,7 @@ class Coin extends SpriteAnimationComponent
   final String coin; // Tipo da fruta (Apple, Banana, Cherry, etc.)
 
   Coin({
-    this.coin = 'coin', // Valor padrão: Maçã
+    this.coin = 'Silver_Coin', // Valor padrão: Maçã
     position,
     size,
   }) : super(
@@ -41,11 +41,10 @@ class Coin extends SpriteAnimationComponent
 
   // Método chamado quando a fruta é carregada no jogo
   @override
-  FutureOr<void> onLoad() {
+  FutureOr<void> onLoad() async {
     // debugMode = true;
 
-    priority =
-        -1; // Prioridade de renderização (renderiza antes dos personagens)
+    priority = -1; // Prioridade de renderização (renderiza antes dos personagens)
 
     // Adiciona uma hitbox retangular para detecção de colisão
     add(
@@ -56,6 +55,8 @@ class Coin extends SpriteAnimationComponent
             CollisionType.passive, // Tipo passivo (não empurra outros objetos)
       ),
     );
+
+    await game.images.load('Items/Coins/$coin.png');
 
     // Define a animação inicial da fruta (flutuando/brilhando)
     animation = SpriteAnimation.fromFrameData(
@@ -80,6 +81,8 @@ class Coin extends SpriteAnimationComponent
       if (game.playSounds) {
         FlameAudio.play('collect_fruit.wav', volume: game.soundVolume);
       }
+
+      await game.images.load('Items/Coins/Collected.png');
 
       // Muda para a animação de coleta (partículas/efeito visual)
       animation = SpriteAnimation.fromFrameData(

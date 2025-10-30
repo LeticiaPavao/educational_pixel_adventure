@@ -143,13 +143,17 @@ class PixelAdventure extends FlameGame
   }
 
   void loseLife() {
-    if (lives > 0) {
+    if (lives > 0 && !isGameOver) {
       lives -= 1; // Remove uma vida
     }
 
-    if (lives < 0) {
+    if (lives <= 0) {
       lives = 0; // Garante que as vidas não fiquem negativas 
+
+      checkGameStatus();
     }
+
+    
   }
 
   void loseLifeEnemy() {
@@ -165,8 +169,20 @@ class PixelAdventure extends FlameGame
   // Verifica o status do jogo (game over ou vitória)
   void checkGameStatus() {
     if (lives <= 0 && !isGameOver) {
-      isGameOver = true; // O jogo acabou
+      isGameOver = true; 
+      _showGameOver();
     }
+  }
+
+  void _showGameOver() async {
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    print('Game Over!'); 
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    resetGame();
   }
 
   // Carrega o próximo nível do jogo
