@@ -40,9 +40,24 @@ class PixelAdventure extends FlameGame
   bool playSounds = true;
   double soundVolume = 1.0;
 
+  // Pontuação do jogador
+  int score = 0;
+
+  // Número de vidas do jogador
+  int lives = 3;
+
+  int liveEnemy = 3; // Número de vidas do inimigo
+
+  bool isGameOver = false; // Indica se o jogo acabou
+
+  bool isGameWon = false; // Indica se o jogo foi vencido
+
   // Lista com os nomes dos níveis do jogo
-  List<String> levelNames = ['Level-03'];
+  List<String> levelNames = ['Level-01', 'Level-03', 'Level-07'];
   int currentLevelIndex = 0; // Índice do nível atual
+
+  bool isLoadingLevel = false; // Indica se um nível está sendo carregado
+  Level? currentLevel;
 
   // Método chamado quando o jogo é carregado
   @override
@@ -67,12 +82,13 @@ class PixelAdventure extends FlameGame
   @override
   void update(double dt) {
     // dt = delta time (tempo desde o último frame)
-
     // Se os controles estiverem ativos, atualiza o joystick
     if (showControls) {
       updateJoystick();
     }
-    super.update(dt);
+
+    checkGameStatus(); // Verifica o status do jogo
+    super.update(dt); // Chama o método update da superclasse
   }
 
   // Método para adicionar o joystick na tela
@@ -117,31 +133,173 @@ class PixelAdventure extends FlameGame
     }
   }
 
+  // Adiciona pontos à pontuação do jogador
+  void addScore(int points) {
+    score += points; // Adiciona os pontos
+
+    if (score < 0) {
+      score = 0; // Garante que a pontuação não fique negativa
+    }
+  }
+
+  void loseLife() {
+    if (lives > 0) {
+      lives -= 1; // Remove uma vida
+    }
+
+    if (lives < 0) {
+      lives = 0; // Garante que as vidas não fiquem negativas
+    }
+  }
+
+  void loseLifeEnemy() {
+    if (liveEnemy > 0) {
+      liveEnemy -= 1; // Remove uma vida
+    }
+
+    if (liveEnemy < 0) {
+      liveEnemy = 0; // Garante que as vidas não fiquem negativas
+    }
+  }
+
+  // Verifica o status do jogo (game over ou vitória)
+  void checkGameStatus() {
+    if (lives <= 0 && !isGameOver) {
+      isGameOver = true; // O jogo acabou
+    }
+  }
+
   // Carrega o próximo nível do jogo
+  // Método otimizado para carregar próximo nível
   void loadNextLevel() {
-    // Remove todos os componentes do nível atual
-    removeWhere((component) => component is Level);
+    // Prevenir múltiplos carregamentos simultâneos
+    if (isLoadingLevel) return;
+
+    isLoadingLevel = true;
 
     // Verifica se há mais níveis
     if (currentLevelIndex < levelNames.length - 1) {
       currentLevelIndex++; // Vai para o próximo nível
-      _loadLevel();
+      _loadLevelWithCleanup();
     } else {
-      // Se não há mais níveis, volta para o primeiro
+      // Se não houver mais níveis, marca vitória e reinicia
+      if (!isGameWon) {
+        isGameWon = true;
+      }
+      // Opcional: reiniciar o jogo ou voltar ao primeiro nível
       currentLevelIndex = 0;
-      _loadLevel();
+      _loadLevelWithCleanup();
     }
+  }
+
+// Método melhorado para carregar nível com tratamento de erro
+  void _loadLevelWithCleanup() {
+    // Limpa componentes antigos de forma segura
+    _cleanupCurrentLevel();
+
+    // Pequeno delay para garantir que a limpeza foi concluída
+    Future.delayed(const Duration(milliseconds: 50), () {
+      try {
+        _loadNewLevel();
+      } catch (e) {
+        print('Erro ao carregar nível: $e');
+        // Em caso de erro, volta para o nível atual
+        _revertToCurrentLevel();
+      }
+    });
+  }
+
+// Limpeza segura dos componentes atuais
+  void _cleanupCurrentLevel() {
+    // Remove o nível atual se existir
+    if (currentLevel != null && currentLevel!.parent != null) {
+      remove(currentLevel!);
+      currentLevel = null;
+    }
+
+    // Remove a câmera se existir
+    if (cam.parent != null) {
+      remove(cam);
+    }
+  }
+
+// Carrega novo nível
+  void _loadNewLevel() {
+    // Cria novo mundo/nível
+    Level newWorld = Level(
+      player: player,
+      levelName: levelNames[currentLevelIndex],
+    );
+
+    currentLevel = newWorld;
+
+    // Configura nova câmera
+    cam = CameraComponent.withFixedResolution(
+      world: newWorld,
+      width: 640,
+      height: 360,
+    );
+    cam.viewfinder.anchor = Anchor.topLeft;
+
+    // Adiciona os novos componentes
+    addAll([cam, newWorld]);
+
+    isLoadingLevel = false;
+  }
+
+// Reverte para o nível atual em caso de erro
+  void _revertToCurrentLevel() {
+    print('Revertendo para nível atual: ${levelNames[currentLevelIndex]}');
+
+    // Se estava tentando carregar próximo nível, volta ao anterior
+    if (currentLevelIndex > 0) {
+      currentLevelIndex--;
+    }
+
+    // Tenta carregar o nível atual novamente
+    _loadNewLevel();
+  }
+
+// Método para recarregar o nível atual (útil para quando o jogador morre)
+  void reloadCurrentLevel() {
+    if (isLoadingLevel) return;
+
+    isLoadingLevel = true;
+    _loadLevelWithCleanup();
+  }
+
+  void resetGame() {
+    // Reseta variáveis do jogo
+    score = 0;
+    lives = 3;
+    liveEnemy = 3;
+    isGameOver = false;
+    isGameWon = false;
+    currentLevelIndex = 0;
+
+    if (currentLevel != null) {
+      currentLevel!.removeFromParent();
+      currentLevel = null;
+    }
+    if (cam.parent != null) {
+      cam.removeFromParent();
+    }
+
+    // Carrega o nível inicial novamente
+    _loadLevel();
   }
 
   // Método privado para carregar um nível
   void _loadLevel() {
     // Adiciona um pequeno delay antes de carregar o nível
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       // Cria o mundo/nível com o jogador e nome do nível
       Level world = Level(
         player: player,
         levelName: levelNames[currentLevelIndex],
       );
+
+      currentLevel = world;
 
       // Configura a câmera com resolução fixa
       cam = CameraComponent.withFixedResolution(
@@ -154,8 +312,62 @@ class PixelAdventure extends FlameGame
 
       // Adiciona a câmera e o mundo ao jogo
       addAll([cam, world]);
+
+      isLoadingLevel = false;
     });
   }
+
+//testar esse depois, no lugar de loadNextLevel(), usar: loadNextLevelOptimized();
+  // void loadNextLevelOptions() {
+  //   if(isLoadingLevel) return;
+
+  //   isLoadingLevel = true;
+
+  //   String nextLevelName;
+
+  //   if(currentLevelIndex < levelNames.length - 1) {
+  //     nextLevelName = levelNames[currentLevelIndex + 1];
+  //   } else {
+  //     nextLevelName = levelNames[0];
+  //   }
+
+  //   Future.microtask((){
+  //     if(currentLevel != null) {
+  //       remove(currentLevel!);
+  //     }
+  //     if(cam.parent != null) {
+  //       remove(cam);
+  //     }
+
+  //     Level newWorld = Level(
+  //       player: player,
+  //       levelName: nextLevelName,
+  //     );
+
+  //     currentLevel = newWorld;
+
+  //     CameraComponent newCam = CameraComponent.withFixedResolution(
+  //       world: newWorld,
+  //       width: 640,
+  //       height: 360,
+  //     );
+  //     newCam.viewfinder.anchor = Anchor.topLeft;
+
+  //     addAll([newCam, newWorld]);
+
+  //     if(currentLevelIndex < levelNames.length - 1) {
+  //       currentLevelIndex++;
+  //     } else {
+  //       currentLevelIndex = 0;
+  //       if (!isGameWon) {
+  //         isGameWon = true;
+  //       }
+  //     }
+
+  //     isLoadingLevel = false;
+
+  //   });
+  // }
 }
 
 /*

@@ -11,19 +11,17 @@ import 'package:pixel_adventure/pixel_adventure.dart';
 // Enum que define os estados possíveis da galinha
 enum State { idle, run, hit }
 
-// Classe que representa o inimigo Galinha no jogo
+// Classe que representa o inimigo Sapo no jogo
 // Herda de SpriteAnimationGroupComponent para ter múltiplas animações
 // Mixins:
 // - HasGameRef<PixelAdventure>: permite acessar o jogo principal
 // - CollisionCallbacks: permite detectar colisões
-class Chicken extends SpriteAnimationGroupComponent
+class Frogger extends SpriteAnimationGroupComponent
     with HasGameRef<PixelAdventure>, CollisionCallbacks {
   final double offNeg; // Distância para esquerda que a galinha pode patrulhar
   final double offPos; // Distância para direita que a galinha pode patrulhar
 
-  final int hitsToDie = 3; // Número de hits necessários para derrotar a galinha
-
-  Chicken({
+  Frogger({
     super.position,
     super.size,
     this.offNeg = 0,
@@ -36,7 +34,7 @@ class Chicken extends SpriteAnimationGroupComponent
   static const runSpeed = 80; // Velocidade de corrida da galinha
   static const _bounceHeight =
       260.0; // Altura do pulo do jogador ao pular na galinha
-  final textureSize = Vector2(32, 34); // Tamanho das texturas da galinha
+  final textureSize = Vector2(480, 128); // Tamanho das texturas da galinha
 
   // Variáveis de movimento e estado
   Vector2 velocity = Vector2.zero(); // Velocidade atual (x, y)
@@ -45,9 +43,6 @@ class Chicken extends SpriteAnimationGroupComponent
   double moveDirection = 1; // Direção atual do movimento (-1 = esq, 1 = dir)
   double targetDirection = -1; // Direção desejada do movimento
   bool gotStomped = false; // Se a galinha foi derrotada
-
-  // Contadores de frames e hits
-  int enemyHits = 0; // Contador de hits recebidos
 
   // Referências e animações
   late final Player player; // Referência ao jogador
@@ -91,7 +86,7 @@ class Chicken extends SpriteAnimationGroupComponent
   void _loadAllAnimations() {
     _idleAnimation = _spriteAnimation('Idle', 13); // 13 frames parado
     _runAnimation = _spriteAnimation('Run', 14); // 14 frames correndo
-    _hitAnimation = _spriteAnimation('Hit', 15) // 15 frames sendo derrotada
+    _hitAnimation = _spriteAnimation('Hit', 4) // 15 frames sendo derrotada
       ..loop = false; // Não repete - executa apenas uma vez
 
     // Mapeia cada estado para sua animação correspondente
@@ -108,7 +103,7 @@ class Chicken extends SpriteAnimationGroupComponent
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache(
-          'Enemies/Chicken/$state (32x34).png'), // Caminho da textura
+          'Enemies/Frogger/$state.png'), // Caminho da textura
       SpriteAnimationData.sequenced(
         amount: amount, // Número de frames
         stepTime: stepTime, // Tempo entre frames
@@ -130,13 +125,13 @@ class Chicken extends SpriteAnimationGroupComponent
 
     // Calcula offsets baseados na direção que estão virados
     double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
-    double chickenOffset = (scale.x > 0) ? 0 : -width;
+    double FroggerOffset = (scale.x > 0) ? 0 : -width;
 
     // Se o jogador está no alcance, persegue ele
     if (playerInRange()) {
       // Define direção alvo baseado na posição do jogador
       targetDirection =
-          (player.x + playerOffset < position.x + chickenOffset) ? -1 : 1;
+          (player.x + playerOffset < position.x + FroggerOffset) ? -1 : 1;
       velocity.x = targetDirection * runSpeed; // Move na direção do jogador
     }
 
@@ -178,26 +173,13 @@ class Chicken extends SpriteAnimationGroupComponent
         FlameAudio.play('bounce.wav',
             volume: game.soundVolume); // Som de quique
       }
+      gotStomped = true; // Marca como derrotada
+      current = State.hit; // Muda para animação de hit
+      player.velocity.y = -_bounceHeight; // Faz o jogador pular
 
-      enemyHits++; // Incrementa o contador de hits) {
-
-      if (enemyHits >= hitsToDie) {
-        gotStomped = true; // Marca como derrotada
-        current = State.hit; // Muda para animação de hit
-        player.velocity.y = -_bounceHeight; // Faz o jogador pular
-
-        // Aguarda a animação de hit terminar
-        await animationTicker?.completed;
-        removeFromParent(); // Remove a galinha do jogo
-      } else {
-        current = State.hit; // Muda para animação de hit
-        player.velocity.y = -_bounceHeight; // Faz o jogador pular
-
-        // Aguarda a animação de hit terminar
-        await animationTicker?.completed;
-        animationTicker?.reset();
-        current = State.idle; // Volta para animação idle
-      }
+      // Aguarda a animação de hit terminar
+      await animationTicker?.completed;
+      removeFromParent(); // Remove a galinha do jogo
     } else {
       // Se o jogador foi atingido lateralmente ou por baixo
       player.collidedwithEnemy(); // Causa dano ao jogador

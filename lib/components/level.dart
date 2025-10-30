@@ -9,11 +9,14 @@ import 'package:pixel_adventure/components/chicken.dart';
 import 'package:pixel_adventure/components/rino.dart';
 import 'package:pixel_adventure/components/collision_block.dart';
 import 'package:pixel_adventure/components/fruit.dart';
+import 'package:pixel_adventure/components/hud.dart';
 import 'package:pixel_adventure/components/gold.dart';
 import 'package:pixel_adventure/components/goose.dart';
 import 'package:pixel_adventure/components/player.dart';
 import 'package:pixel_adventure/components/saw.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
+import 'package:pixel_adventure/components/frogger.dart';
+import 'package:pixel_adventure/components/coin.dart';
 
 // Classe que representa um nível completo do jogo
 // Herda de World (mundo do Flame) e tem acesso ao jogo principal
@@ -28,6 +31,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
   // Método chamado quando o nível é carregado
   @override
   FutureOr<void> onLoad() async {
+    try{
     // Carrega o arquivo Tiled (.tmx) com tamanho de tile 16x16 pixels
     level = await TiledComponent.load('$levelName.tmx', Vector2.all(16));
 
@@ -37,8 +41,13 @@ class Level extends World with HasGameRef<PixelAdventure> {
     _scrollingBackground(); // Fundo animado
     _spawningObjects(); // Objetos e personagens
     _addCollisions(); // Blocos de colisão
+    add(HUD()); // HUD (pontuação, vidas, etc.)
 
     return super.onLoad();
+    }catch(e){
+      print('Erro ao carregar o nível: $e');
+      rethrow;
+    }
   }
 
   // Configura o fundo animado com efeito parallax
@@ -159,6 +168,29 @@ class Level extends World with HasGameRef<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(gold);
+            break;
+
+            case 'Frogger':
+            // Obtém propriedades de patrulha do inimigo
+            final offNeg = spawnPoint.properties.getValue('offNeg');
+            final offPos = spawnPoint.properties.getValue('offPos');
+
+            final frogger = Frogger(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              offNeg: offNeg, // Alcance para esquerda
+              offPos: offPos, // Alcance para direita
+            );
+            add(frogger);
+            break;
+
+            case 'Coin':
+            final coin = Coin(
+              coin: spawnPoint.name, // Tipo da fruta (Apple, Banana, etc.)
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(coin);
             break;
 
           default:
