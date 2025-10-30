@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="68">
+ <tileset firstgid="1" name="Water" tilewidth="16" tileheight="16" tilecount="4" columns="2">
+  <image source="../images/Terrain/Water_frames (16 x 32).png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="5" name="Terrain" tilewidth="16" tileheight="16" tilecount="242" columns="22">
+  <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
+ </tileset>
+ <tileset firstgid="247" name="gotto" tilewidth="16" tileheight="16" tilecount="975" columns="65">
+  <image source="../images/Terrain/tiledemo.png" width="1040" height="240"/>
+ </tileset>
+ <tileset firstgid="1222" name="no man's land1" tilewidth="16" tileheight="16" tilecount="91" columns="13">
+  <image source="../images/Terrain/no man's land v1.0 transparent.PNG" width="208" height="112"/>
+ </tileset>
+ <tileset firstgid="1313" name="River" tilewidth="16" tileheight="16" tilecount="384" columns="24">
+  <image source="../images/Terrain/River Tileset Desaturated.png" width="384" height="256"/>
+ </tileset>
+ <tileset firstgid="1697" name="no man's land2" tilewidth="16" tileheight="16" tilecount="77" columns="11">
+  <image source="../images/Terrain/no man's land v1.0 building transparent.PNG" width="176" height="112"/>
+ </tileset>
+ <tileset firstgid="1774" name="Flowers (16 x 16)" tilewidth="16" tileheight="16" tilecount="4" columns="4">
+  <image source="../images/Terrain/Flowers (16 x 16).png" width="64" height="16"/>
+ </tileset>
+ <tileset firstgid="1778" name="tileset" tilewidth="16" tileheight="16" tilecount="345" columns="23">
+  <image source="../images/Terrain/tileset.png" width="368" height="240"/>
+ </tileset>
+ <tileset firstgid="2123" source="Pixel Adventure.tsx"/>
+ <layer id="8" name="Background" width="30" height="20">
+  <properties>
+   <property name="BackgroundColor" value="Gray"/>
+  </properties>
+  <data encoding="csv">
+2211,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2212,2213,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2217,2218,2219,0,0,0,2217,2218,2219,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2239,2240,2241,2158,2159,2159,2239,2240,2241,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2261,2262,2263,2180,2181,2181,2261,2262,2263,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2158,2158,2159,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2158,2159,2159,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2180,2181,2181,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3221227823,3221227822,3221227821,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3221227801,3221227800,3221227799,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3221227779,3221227778,3221227777,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2235,
+2233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2235,
+2233,2131,2131,2131,2131,2131,2131,0,0,0,0,2131,2131,2131,2131,2131,2131,2131,2131,2131,2131,2131,2131,2131,2131,2131,2131,2131,2131,2235,
+2233,2151,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2152,2153,2235,
+2255,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2256,2257
+</data>
+ </layer>
+ <objectgroup id="4" name="Spawnpoints">
+  <object id="36" name="Gold" type="Gold" x="156.667" y="232"/>
+  <object id="21" name="Gold" type="Gold" x="416.667" y="116"/>
+  <object id="60" type="Checkpoint" x="16.9899" y="16.3527" width="64.5" height="64"/>
+  <object id="56" name="Player" type="Player" x="32.1667" y="246.167" width="19.3333" height="24"/>
+  <object id="33" name="Gold" type="Gold" x="31.3333" y="156.667"/>
+  <object id="19" name="Gold" type="Gold" x="438.667" y="116"/>
+  <object id="29" name="Gold" type="Gold" x="248" y="74"/>
+  <object id="30" name="Gold" type="Gold" x="224.667" y="85.3333"/>
+  <object id="31" name="Gold" type="Gold" x="120.667" y="150.667"/>
+  <object id="32" name="Gold" type="Gold" x="142" y="133.333"/>
+  <object id="35" name="Gold" type="Gold" x="136.667" y="232.667"/>
+  <object id="34" name="Gold" type="Gold" x="31.3333" y="107.333"/>
+  <object id="61" name="Apple" type="Fruit" x="148.576" y="200.034" width="32" height="32"/>
+  <object id="62" name="Apple" type="Fruit" x="168.095" y="157.892" width="32" height="32"/>
+  <object id="63" name="Apple" type="Fruit" x="197.373" y="230.199" width="32" height="32"/>
+  <object id="64" name="Apple" type="Fruit" x="191.606" y="171.2" width="32" height="32"/>
+  <object id="66" name="Chicken" type="Chicken" x="229.756" y="237.297" width="32" height="32">
+   <properties>
+    <property name="offNeg" type="float" value="3"/>
+    <property name="offPos" type="float" value="3"/>
+   </properties>
+  </object>
+  <object id="67" name="Goose" type="Goose" x="270.567" y="236.853" width="32" height="32">
+   <properties>
+    <property name="offNeg" type="float" value="3"/>
+    <property name="offPos" type="float" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="Collisions">
+  <object id="38" name="Platform" type="Platform" x="15.3333" y="270.667" width="96.6667" height="12.6667"/>
+  <object id="39" name="Platform" type="Platform" x="177.333" y="270.667" width="287.333" height="12.6667"/>
+  <object id="40" name="Platform" type="Platform" x="304.667" y="223.333" width="46.6667" height="47.3333"/>
+  <object id="41" name="Platform" type="Platform" x="224" y="191.333" width="48.6667" height="16"/>
+  <object id="42" name="Platform" type="Platform" x="336" y="159.333" width="48.6667" height="14"/>
+  <object id="43" name="Platform" type="Platform" x="286.667" y="78" width="50.6667" height="18.6667"/>
+  <object id="44" name="Platform" type="Platform" x="194" y="111.333" width="46" height="32.6667"/>
+  <object id="45" name="Platform" type="Platform" x="100.667" y="174.667" width="39.3333" height="16"/>
+  <object id="46" name="Platform" type="Platform" x="15.3333" y="168.667" width="48.6667" height="12"/>
+  <object id="47" name="Platform" type="Platform" x="17.3333" y="120.667" width="47.3333" height="14.6667"/>
+  <object id="48" name="Platform" type="Platform" x="16" y="80.3333" width="63.5" height="4.83333"/>
+  <object id="49" name="Platform" type="Platform" x="376.667" y="127.333" width="86" height="30.6667"/>
+  <object id="50" name="Platform" type="Platform" x="416.667" y="249.333" width="33.3333" height="21.3333"/>
+ </objectgroup>
+</map>

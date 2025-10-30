@@ -6,8 +6,11 @@ import 'package:flame_tiled/flame_tiled.dart'; // Para carregar mapas Tiled
 import 'package:pixel_adventure/components/background_tile.dart';
 import 'package:pixel_adventure/components/checkpoint.dart';
 import 'package:pixel_adventure/components/chicken.dart';
+import 'package:pixel_adventure/components/rino.dart';
 import 'package:pixel_adventure/components/collision_block.dart';
 import 'package:pixel_adventure/components/fruit.dart';
+import 'package:pixel_adventure/components/gold.dart';
+import 'package:pixel_adventure/components/goose.dart';
 import 'package:pixel_adventure/components/player.dart';
 import 'package:pixel_adventure/components/saw.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
@@ -119,6 +122,43 @@ class Level extends World with HasGameRef<PixelAdventure> {
               offPos: offPos, // Alcance para direita
             );
             add(chicken);
+            break;
+          
+            case 'Rino':
+            // Obtém propriedades de patrulha do inimigo
+            final offNeg = spawnPoint.properties.getValue('offNeg');
+            final offPos = spawnPoint.properties.getValue('offPos');
+
+            final rino = Rino(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              offNeg: offNeg, // Alcance para esquerda
+              offPos: offPos, // Alcance para direita
+            );
+            add(rino);
+            break;
+
+          case 'Goose':
+            // Obtém propriedades de patrulha do inimigo
+            final offNeg = spawnPoint.properties.getValue('offNeg');
+            final offPos = spawnPoint.properties.getValue('offPos');
+
+            final goose = Goose(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              offNeg: offNeg, // Alcance para esquerda
+              offPos: offPos, // Alcance para direita
+            );
+            add(goose);
+            break;
+
+          case 'Gold':
+            final gold = Gold(
+              gold: spawnPoint.name, // Tipo da fruta (Apple, Banana, etc.)
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(gold);
             break;
 
           default:

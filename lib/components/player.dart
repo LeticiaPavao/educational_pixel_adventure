@@ -7,6 +7,9 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart'; // Para input do teclado
 import 'package:pixel_adventure/components/checkpoint.dart';
 import 'package:pixel_adventure/components/chicken.dart';
+import 'package:pixel_adventure/components/rino.dart';
+import 'package:pixel_adventure/components/gold.dart';
+import 'package:pixel_adventure/components/goose.dart';
 import 'package:pixel_adventure/components/collision_block.dart';
 import 'package:pixel_adventure/components/custom_hitbox.dart';
 import 'package:pixel_adventure/components/fruit.dart';
@@ -31,7 +34,7 @@ class Player extends SpriteAnimationGroupComponent
   String character; // Tipo do personagem (Ninja Frog, Mask Dude, etc.)
   Player({
     position,
-    this.character = 'Ninja Frog', // Personagem padrão
+    this.character = 'Mask Dude', // Personagem padrão
   }) : super(position: position);
 
   // Configurações de animação
@@ -137,8 +140,11 @@ class Player extends SpriteAnimationGroupComponent
       Set<Vector2> intersectionPoints, PositionComponent other) {
     if (!reachedCheckpoint) {
       if (other is Fruit) other.collidedWithPlayer(); // Coleta fruta
+      if (other is Gold) other.collidedWithPlayer(); // Coleta fruta
       if (other is Saw) _respawn(); // Morre para serra
       if (other is Chicken) other.collidedWithPlayer(); // Interage com galinha
+      if (other is Rino) other.collidedWithPlayer(); // Interage com galinha
+      if (other is Goose) other.collidedWithPlayer(); // Interage com galinha
       if (other is Checkpoint) _reachedCheckpoint(); // Ativa checkpoint
     }
     super.onCollisionStart(intersectionPoints, other);

@@ -1,0 +1,96 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Level-03.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "Todos os Ficheiros (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Usuario/Desktop/backJogo/educational_pixel_adventure/assets/tiles/Level-01.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.690703125,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 291.29892333995656,
+                "y": 285.6799593364447
+            }
+        },
+        "C:/Users/Usuario/Desktop/backJogo/educational_pixel_adventure/assets/tiles/Pixel Adventure.tsx": {
+            "scaleInDock": 1
+        },
+        "Level-01.tmx": {
+            "expandedObjectLayers": [
+                3,
+                2
+            ],
+            "scale": 1.690703125,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 320.28094820017566,
+                "y": 171.52626958088814
+            }
+        },
+        "Level-03.tmx": {
+            "scale": 2,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 271.25,
+                "y": 190.5
+            }
+        },
+        "Level-03.tmx#Flowers (16 x 16)": {
+            "scaleInDock": 1
+        },
+        "Level-03.tmx#River": {
+            "scaleInDock": 1
+        },
+        "Level-03.tmx#Terrain": {
+            "scaleInDock": 1
+        },
+        "Level-03.tmx#Water": {
+            "scaleInDock": 1
+        },
+        "Level-03.tmx#gotto": {
+            "scaleInDock": 1
+        },
+        "Level-03.tmx#no man's land1": {
+            "scaleInDock": 1
+        },
+        "Level-03.tmx#no man's land2": {
+            "scaleInDock": 1
+        },
+        "Level-03.tmx#tileset": {
+            "scaleInDock": 1
+        },
+        "Pixel Adventure.tsx": {
+            "scaleInDock": 1
+        }
+    },
+    "last.imagePath": "C:/Users/Usuario/educational_pixel_adventure/assets/images/Terrain",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "Level-03.tmx",
+        "C:/Users/Usuario/Desktop/backJogo/educational_pixel_adventure/assets/tiles/Level-01.tmx"
+    ],
+    "project": "Level-03.tmx.tiled-project",
+    "property.type": "string",
+    "recentFiles": [
+        "C:/Users/Usuario/Desktop/backJogo/educational_pixel_adventure/assets/tiles/Level-01.tmx",
+        "Level-03.tmx",
+        "Level-01.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
