@@ -53,7 +53,7 @@ class PixelAdventure extends FlameGame
   bool isGameWon = false; // Indica se o jogo foi vencido
 
   // Lista com os nomes dos níveis do jogo
-  List<String> levelNames = ['Level-01', 'Level-03', 'Level-07'];
+  List<String> levelNames = ['Level-01','Level-03','Level-07'];
   int currentLevelIndex = 0; // Índice do nível atual
 
   bool isLoadingLevel = false; // Indica se um nível está sendo carregado
@@ -148,7 +148,7 @@ class PixelAdventure extends FlameGame
     }
 
     if (lives < 0) {
-      lives = 0; // Garante que as vidas não fiquem negativas
+      lives = 0; // Garante que as vidas não fiquem negativas 
     }
   }
 

@@ -36,6 +36,8 @@ class Goose extends SpriteAnimationGroupComponent
       260.0; // Altura do pulo do jogador ao pular na galinha
   final textureSize = Vector2(32, 32); // Tamanho das texturas da galinha
 
+  final int hitsToDie = 3;
+
   // Variáveis de movimento e estado
   Vector2 velocity = Vector2.zero(); // Velocidade atual (x, y)
   double rangeNeg = 0; // Limite esquerdo do alcance
@@ -43,6 +45,8 @@ class Goose extends SpriteAnimationGroupComponent
   double moveDirection = 1; // Direção atual do movimento (-1 = esq, 1 = dir)
   double targetDirection = -1; // Direção desejada do movimento
   bool gotStomped = false; // Se a galinha foi derrotada
+
+  int enemyHits = 0;
 
   // Referências e animações
   late final Player player; // Referência ao jogador
@@ -173,13 +177,25 @@ class Goose extends SpriteAnimationGroupComponent
         FlameAudio.play('bounce.wav',
             volume: game.soundVolume); // Som de quique
       }
-      gotStomped = true; // Marca como derrotada
-      current = State.hit; // Muda para animação de hit
-      player.velocity.y = -_bounceHeight; // Faz o jogador pular
+      enemyHits++; // Incrementa o contador de hits) {
 
-      // Aguarda a animação de hit terminar
-      await animationTicker?.completed;
-      removeFromParent(); // Remove a galinha do jogo
+      if (enemyHits >= hitsToDie) {
+        gotStomped = true; // Marca como derrotada
+        current = State.hit; // Muda para animação de hit
+        player.velocity.y = -_bounceHeight; // Faz o jogador pular
+
+        // Aguarda a animação de hit terminar
+        await animationTicker?.completed;
+        removeFromParent(); // Remove a galinha do jogo
+      } else {
+        current = State.hit; // Muda para animação de hit
+        player.velocity.y = -_bounceHeight; // Faz o jogador pular
+
+        // Aguarda a animação de hit terminar
+        await animationTicker?.completed;
+        animationTicker?.reset();
+        current = State.idle; // Volta para animação idle
+      }
     } else {
       // Se o jogador foi atingido lateralmente ou por baixo
       player.collidedwithEnemy(); // Causa dano ao jogador

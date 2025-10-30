@@ -147,7 +147,7 @@ class Player extends SpriteAnimationGroupComponent
     if (!reachedCheckpoint) {
       if (other is Fruit) {
         other.collidedWithPlayer(); // Coleta fruta
-        game.addScore(1); // Adiciona 10 pontos
+        game.addScore(1); // Adiciona 1 ponto
       }
       if (other is Saw) {
         game.loseLife(); // Perde vida

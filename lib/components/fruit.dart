@@ -41,11 +41,10 @@ class Fruit extends SpriteAnimationComponent
 
   // Método chamado quando a fruta é carregada no jogo
   @override
-  FutureOr<void> onLoad() {
+  FutureOr<void> onLoad() async {
     // debugMode = true;
 
-    priority =
-        -1; // Prioridade de renderização (renderiza antes dos personagens)
+    priority = -1; // Prioridade de renderização (renderiza antes dos personagens)
 
     // Adiciona uma hitbox retangular para detecção de colisão
     add(
@@ -56,6 +55,8 @@ class Fruit extends SpriteAnimationComponent
             CollisionType.passive, // Tipo passivo (não empurra outros objetos)
       ),
     );
+
+    await game.images.load('Items/Fruits/$fruit.png');
 
     // Define a animação inicial da fruta (flutuando/brilhando)
     animation = SpriteAnimation.fromFrameData(
@@ -81,6 +82,8 @@ class Fruit extends SpriteAnimationComponent
         FlameAudio.play('collect_fruit.wav', volume: game.soundVolume);
       }
 
+       await game.images.load('Items/Fruits/Collected.png');
+
       // Muda para a animação de coleta (partículas/efeito visual)
       animation = SpriteAnimation.fromFrameData(
         game.images
@@ -89,7 +92,7 @@ class Fruit extends SpriteAnimationComponent
           amount: 6, // 6 frames na animação de coleta
           stepTime: stepTime,
           textureSize: Vector2.all(32),
-          loop: false, // Não repete - executa apenas uma vez
+          loop: false, // Não repete - executa apenas uma vez fruit.png
         ),
       );
 
