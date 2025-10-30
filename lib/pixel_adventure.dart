@@ -178,8 +178,6 @@ class PixelAdventure extends FlameGame
 
     await Future.delayed(const Duration(seconds: 2));
 
-    print('Game Over!'); 
-
     await Future.delayed(const Duration(seconds: 2));
 
     resetGame();
@@ -218,8 +216,7 @@ class PixelAdventure extends FlameGame
       try {
         _loadNewLevel();
       } catch (e) {
-        print('Erro ao carregar nível: $e');
-        // Em caso de erro, volta para o nível atual
+        
         _revertToCurrentLevel();
       }
     });
@@ -265,9 +262,6 @@ class PixelAdventure extends FlameGame
 
 // Reverte para o nível atual em caso de erro
   void _revertToCurrentLevel() {
-    print('Revertendo para nível atual: ${levelNames[currentLevelIndex]}');
-
-    // Se estava tentando carregar próximo nível, volta ao anterior
     if (currentLevelIndex > 0) {
       currentLevelIndex--;
     }
@@ -332,58 +326,6 @@ class PixelAdventure extends FlameGame
       isLoadingLevel = false;
     });
   }
-
-//testar esse depois, no lugar de loadNextLevel(), usar: loadNextLevelOptimized();
-  // void loadNextLevelOptions() {
-  //   if(isLoadingLevel) return;
-
-  //   isLoadingLevel = true;
-
-  //   String nextLevelName;
-
-  //   if(currentLevelIndex < levelNames.length - 1) {
-  //     nextLevelName = levelNames[currentLevelIndex + 1];
-  //   } else {
-  //     nextLevelName = levelNames[0];
-  //   }
-
-  //   Future.microtask((){
-  //     if(currentLevel != null) {
-  //       remove(currentLevel!);
-  //     }
-  //     if(cam.parent != null) {
-  //       remove(cam);
-  //     }
-
-  //     Level newWorld = Level(
-  //       player: player,
-  //       levelName: nextLevelName,
-  //     );
-
-  //     currentLevel = newWorld;
-
-  //     CameraComponent newCam = CameraComponent.withFixedResolution(
-  //       world: newWorld,
-  //       width: 640,
-  //       height: 360,
-  //     );
-  //     newCam.viewfinder.anchor = Anchor.topLeft;
-
-  //     addAll([newCam, newWorld]);
-
-  //     if(currentLevelIndex < levelNames.length - 1) {
-  //       currentLevelIndex++;
-  //     } else {
-  //       currentLevelIndex = 0;
-  //       if (!isGameWon) {
-  //         isGameWon = true;
-  //       }
-  //     }
-
-  //     isLoadingLevel = false;
-
-  //   });
-  // }
 }
 
 /*
