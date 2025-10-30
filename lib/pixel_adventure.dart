@@ -53,7 +53,7 @@ class PixelAdventure extends FlameGame
   bool isGameWon = false; // Indica se o jogo foi vencido
 
   // Lista com os nomes dos níveis do jogo
-  List<String> levelNames = ['Level-01','Level-07'];
+  List<String> levelNames = ['Level-01', 'Level-07'];
   int currentLevelIndex = 0; // Índice do nível atual
 
   bool isLoadingLevel = false; // Indica se um nível está sendo carregado
@@ -170,32 +170,102 @@ class PixelAdventure extends FlameGame
   }
 
   // Carrega o próximo nível do jogo
+  // Método otimizado para carregar próximo nível
   void loadNextLevel() {
-    if(isLoadingLevel) return;
+    // Prevenir múltiplos carregamentos simultâneos
+    if (isLoadingLevel) return;
 
     isLoadingLevel = true;
-
-    if(currentLevel != null) {
-      currentLevel!.removeFromParent();
-      currentLevel = null;
-    }
-
-    if(cam.parent != null) {
-      cam.removeFromParent();
-    }
 
     // Verifica se há mais níveis
     if (currentLevelIndex < levelNames.length - 1) {
       currentLevelIndex++; // Vai para o próximo nível
-      _loadLevel();
+      _loadLevelWithCleanup();
     } else {
+      // Se não houver mais níveis, marca vitória e reinicia
       if (!isGameWon) {
-        isGameWon = true; // Marca o jogo como vencido
+        isGameWon = true;
       }
-      // Se não houver mais níveis, reinicia o jogo
+      // Opcional: reiniciar o jogo ou voltar ao primeiro nível
       currentLevelIndex = 0;
-      _loadLevel();
+      _loadLevelWithCleanup();
     }
+  }
+
+// Método melhorado para carregar nível com tratamento de erro
+  void _loadLevelWithCleanup() {
+    // Limpa componentes antigos de forma segura
+    _cleanupCurrentLevel();
+
+    // Pequeno delay para garantir que a limpeza foi concluída
+    Future.delayed(const Duration(milliseconds: 50), () {
+      try {
+        _loadNewLevel();
+      } catch (e) {
+        print('Erro ao carregar nível: $e');
+        // Em caso de erro, volta para o nível atual
+        _revertToCurrentLevel();
+      }
+    });
+  }
+
+// Limpeza segura dos componentes atuais
+  void _cleanupCurrentLevel() {
+    // Remove o nível atual se existir
+    if (currentLevel != null && currentLevel!.parent != null) {
+      remove(currentLevel!);
+      currentLevel = null;
+    }
+
+    // Remove a câmera se existir
+    if (cam.parent != null) {
+      remove(cam);
+    }
+  }
+
+// Carrega novo nível
+  void _loadNewLevel() {
+    // Cria novo mundo/nível
+    Level newWorld = Level(
+      player: player,
+      levelName: levelNames[currentLevelIndex],
+    );
+
+    currentLevel = newWorld;
+
+    // Configura nova câmera
+    cam = CameraComponent.withFixedResolution(
+      world: newWorld,
+      width: 640,
+      height: 360,
+    );
+    cam.viewfinder.anchor = Anchor.topLeft;
+
+    // Adiciona os novos componentes
+    addAll([cam, newWorld]);
+
+    isLoadingLevel = false;
+  }
+
+// Reverte para o nível atual em caso de erro
+  void _revertToCurrentLevel() {
+    print('Revertendo para nível atual: ${levelNames[currentLevelIndex]}');
+
+    // Se estava tentando carregar próximo nível, volta ao anterior
+    if (currentLevelIndex > 0) {
+      currentLevelIndex--;
+    }
+
+    // Tenta carregar o nível atual novamente
+    _loadNewLevel();
+  }
+
+// Método para recarregar o nível atual (útil para quando o jogador morre)
+  void reloadCurrentLevel() {
+    if (isLoadingLevel) return;
+
+    isLoadingLevel = true;
+    _loadLevelWithCleanup();
   }
 
   void resetGame() {
@@ -207,11 +277,11 @@ class PixelAdventure extends FlameGame
     isGameWon = false;
     currentLevelIndex = 0;
 
-    if(currentLevel != null) {
+    if (currentLevel != null) {
       currentLevel!.removeFromParent();
       currentLevel = null;
     }
-    if(cam.parent != null) {
+    if (cam.parent != null) {
       cam.removeFromParent();
     }
 
@@ -296,7 +366,7 @@ class PixelAdventure extends FlameGame
 
   //     isLoadingLevel = false;
 
-  //   });   
+  //   });
   // }
 }
 

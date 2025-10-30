@@ -28,6 +28,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
   // Método chamado quando o nível é carregado
   @override
   FutureOr<void> onLoad() async {
+    try{
     // Carrega o arquivo Tiled (.tmx) com tamanho de tile 16x16 pixels
     level = await TiledComponent.load('$levelName.tmx', Vector2.all(16));
 
@@ -40,6 +41,10 @@ class Level extends World with HasGameRef<PixelAdventure> {
     add(HUD()); // HUD (pontuação, vidas, etc.)
 
     return super.onLoad();
+    }catch(e){
+      print('Erro ao carregar o nível: $e');
+      rethrow;
+    }
   }
 
   // Configura o fundo animado com efeito parallax
