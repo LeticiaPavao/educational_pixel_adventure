@@ -36,22 +36,16 @@ flutter:
     - assets/images/Traps/Saw/
     - assets/images/Items/Checkpoints/Checkpoint/
     - assets/images/Items/Fruits/
-<<<<<<< HEAD
     - assets/images/Items/Collect/Gold.png
-=======
     - assets/images/Items/Coins/
->>>>>>> origin/master
     - assets/images/Main Characters/
     - assets/images/Main Characters/Mask Dude/
     - assets/images/Main Characters/Ninja Frog/
     - assets/images/Main Characters/Pink Man/
     - assets/images/Main Characters/Virtual Guy/
     - assets/images/Enemies/Chicken/
-<<<<<<< HEAD
     - assets/images/Enemies/Rino/
     - assets/images/Enemies/Goose/
-=======
     - assets/images/Enemies/Frogger/
->>>>>>> origin/master
   
   
