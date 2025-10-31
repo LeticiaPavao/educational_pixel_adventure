@@ -31,12 +31,11 @@ class Frogger extends SpriteAnimationGroupComponent
   });
 
   // Constantes do jogo
-  static const stepTime = 0.05; // Tempo entre frames das animações
+  static const stepTime = 0.13; // Tempo entre frames das animações, deve ser 
   static const tileSize = 16; // Tamanho de cada tile no jogo
-  static const runSpeed = 80; // Velocidade de corrida da galinha
-  static const _bounceHeight =
-      260.0; // Altura do pulo do jogador ao pular na galinha
-  final textureSize = Vector2(480, 128); // Tamanho das texturas da galinha
+  static const runSpeed = 80.0; // Velocidade de corrida da galinha
+  static const _bounceHeight = 200.0; // Altura do pulo do jogador ao pular na galinha
+  final textureSize = Vector2(128, 128); // Tamanho das texturas da galinha
 
   // Variáveis de movimento e estado
   Vector2 velocity = Vector2.zero(); // Velocidade atual (x, y)
@@ -88,9 +87,9 @@ class Frogger extends SpriteAnimationGroupComponent
 
   // Carrega todas as animações da galinha
   void _loadAllAnimations() {
-    _idleAnimation = _spriteAnimation('Idle', 13); // 13 frames parado
-    _runAnimation = _spriteAnimation('Run', 14); // 14 frames correndo
-    _hitAnimation = _spriteAnimation('Hit', 4) // 15 frames sendo derrotada
+    _idleAnimation = _spriteAnimation('Idle', 5); // 
+    _runAnimation = _spriteAnimation('Run', 8); // 
+    _hitAnimation = _spriteAnimation('Hit', 4) // 
       ..loop = false; // Não repete - executa apenas uma vez
 
     // Mapeia cada estado para sua animação correspondente
@@ -130,7 +129,7 @@ class Frogger extends SpriteAnimationGroupComponent
 
     // Calcula offsets baseados na direção que estão virados
     double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
-    double FroggerOffset = (scale.x > 0) ? 0 : -width;
+    double FroggerOffset = (scale.x > 0) ? 0 : -width; 
 
     // Se o jogador está no alcance, persegue ele
     if (playerInRange()) {
@@ -164,8 +163,11 @@ class Frogger extends SpriteAnimationGroupComponent
     current = (velocity.x != 0) ? State.run : State.idle; // operador ternário
 
     // Vira o sprite na direção do movimento
-    if ((moveDirection > 0 && scale.x > 0) ||
-        (moveDirection < 0 && scale.x < 0)) {
+    if (moveDirection > 0 && scale.x < 0) {
+      // indo para a direita, mas está virado para a esquerda → vira
+      flipHorizontallyAroundCenter();
+    } else if (moveDirection < 0 && scale.x > 0) {
+      // indo para a esquerda, mas está virado para a direita → vira
       flipHorizontallyAroundCenter();
     }
   }

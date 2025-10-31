@@ -26,7 +26,7 @@ class Coin extends SpriteAnimationComponent
         );
 
   // Configurações de animação e colisão
-  final double stepTime = 0.05; // Tempo entre cada frame da animação
+  final double stepTime = 0.1; // Tempo entre cada frame da animação
 
   // Define a hitbox personalizada para a fruta
   // A hitbox é menor que o sprite visual para melhor jogabilidade
@@ -63,8 +63,8 @@ class Coin extends SpriteAnimationComponent
       game.images.fromCache(
           'Items/Coins/$coin.png'), // Carrega a spritesheet da fruta
       SpriteAnimationData.sequenced(
-        amount: 17, // 17 frames na animação
-        stepTime: stepTime, // Cada frame dura 0.05 segundos
+        amount: 4, // 17 frames na animação
+        stepTime: stepTime, // Cada frame dura 0.09 segundos
         textureSize: Vector2.all(32), // Cada frame tem 32x32 pixels
       ),
     );
@@ -89,7 +89,7 @@ class Coin extends SpriteAnimationComponent
         game.images
             .fromCache('Items/Coins/Collected.png'), // Spritesheet de coleta
         SpriteAnimationData.sequenced(
-          amount: 6, // 6 frames na animação de coleta
+          amount: 5, // 6 frames na animação de coleta
           stepTime: stepTime,
           textureSize: Vector2.all(32),
           loop: false, // Não repete - executa apenas uma vez
