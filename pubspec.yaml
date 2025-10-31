@@ -17,6 +17,7 @@ dependencies:
   flame_tiled: ^3.0.8
   flame_audio: ^2.0.5
   archive: ^4.0.7
+  google_fonts: ^6.3.2
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +34,7 @@ flutter:
     - assets/images/Background/
     - assets/images/Terrain/
     - assets/images/HUD/
+    - assets/images/Other/
     - assets/images/Traps/Saw/
     - assets/images/Items/Checkpoints/Checkpoint/
     - assets/images/Items/Fruits/

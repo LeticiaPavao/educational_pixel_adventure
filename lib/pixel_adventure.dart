@@ -1,11 +1,13 @@
 // Importa os pacotes necessários
 import 'dart:async'; // Para operações assíncronas
 
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/painting.dart';
+import 'package:pixel_adventure/components/hud.dart';
 import 'package:pixel_adventure/components/jump_button.dart';
 import 'package:pixel_adventure/components/player.dart';
 import 'package:pixel_adventure/components/level.dart';
@@ -53,7 +55,7 @@ class PixelAdventure extends FlameGame
   bool isGameWon = false; // Indica se o jogo foi vencido
 
   // Lista com os nomes dos níveis do jogo
-  List<String> levelNames = ['Level-01','Level-03','Level-07'];
+  List<String> levelNames = ['Level-01', 'Level-03', 'Level-07'];
   int currentLevelIndex = 0; // Índice do nível atual
 
   bool isLoadingLevel = false; // Indica se um nível está sendo carregado
@@ -148,7 +150,7 @@ class PixelAdventure extends FlameGame
     }
 
     if (lives <= 0) {
-      lives = 0; // Garante que as vidas não fiquem negativas 
+      lives = 0; // Garante que as vidas não fiquem negativas
 
       checkGameStatus();
     }
@@ -167,13 +169,12 @@ class PixelAdventure extends FlameGame
   // Verifica o status do jogo (game over ou vitória)
   void checkGameStatus() {
     if (lives <= 0 && !isGameOver) {
-      isGameOver = true; 
+      isGameOver = true;
       _showGameOver();
     }
   }
 
   void _showGameOver() async {
-
     await Future.delayed(const Duration(seconds: 2));
 
     await Future.delayed(const Duration(seconds: 2));
@@ -214,7 +215,6 @@ class PixelAdventure extends FlameGame
       try {
         _loadNewLevel();
       } catch (e) {
-        
         _revertToCurrentLevel();
       }
     });
@@ -309,17 +309,34 @@ class PixelAdventure extends FlameGame
 
       currentLevel = world;
 
-      // Configura a câmera com resolução fixa
-      cam = CameraComponent.withFixedResolution(
-        world: world, // Mundo que a câmera vai seguir
-        width: 640, // Largura da viewport
-        height: 360, // Altura da viewport
-      );
-      cam.viewfinder.anchor =
-          Anchor.topLeft; // Âncora no canto superior esquerdo
+      // Configuração condicional da câmera baseada no nível
+      if (levelNames[currentLevelIndex] == 'Level-01') {
+        // Configuração para Level-01 (mapa 40x23)
+        cam = CameraComponent.withFixedResolution(
+          world: world,
+          width: 640, // 40 tiles * 16px = 640
+          height: 368, // 23 tiles * 16px = 368
+        );
+      } else {
+        // Configuração padrão para outros níveis (mapa 30x20)
+        cam = CameraComponent.withFixedResolution(
+          world: world,
+          width: 480, // 30 tiles * 16px = 480
+          height: 320, // 20 tiles * 16px = 320
+        );
+      }
+
+      // cam = CameraComponent(
+      //   world: world,
+      // ); //camera pega a tela inteira
+
+      cam.viewfinder.anchor = Anchor.topLeft; // Âncora no canto superior esquerdo
+
+      // cam.viewport = MaxViewport(); // Usa toda a tela do dispositivo
 
       // Adiciona a câmera e o mundo ao jogo
       addAll([cam, world]);
+      cam.viewport.add(HUD());
 
       isLoadingLevel = false;
     });
