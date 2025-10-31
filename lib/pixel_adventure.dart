@@ -29,6 +29,8 @@ class PixelAdventure extends FlameGame
   // Componente de câmera que segue o jogador
   late CameraComponent cam;
 
+  late HUD hud; // Componente HUD (Heads-Up Display)
+
   // Cria o jogador com o personagem 'Mask Dude'
   Player player = Player(character: 'Ninja Frog');
 
@@ -152,8 +154,18 @@ class PixelAdventure extends FlameGame
     if (lives <= 0) {
       lives = 0; // Garante que as vidas não fiquem negativas
 
-      checkGameStatus();
+      isGameOver = true;
+
+      //checkGameStatus();
+
+      _showGameOver();
     }
+  }
+
+  void _showGameOver() async {
+    await Future.delayed(const Duration(seconds: 3));
+
+    resetGame();
   }
 
   void loseLifeEnemy() {
@@ -174,14 +186,6 @@ class PixelAdventure extends FlameGame
     }
   }
 
-  void _showGameOver() async {
-    await Future.delayed(const Duration(seconds: 2));
-
-    await Future.delayed(const Duration(seconds: 2));
-
-    resetGame();
-  }
-
   // Carrega o próximo nível do jogo
   // Método otimizado para carregar próximo nível
   void loadNextLevel() {
@@ -189,6 +193,10 @@ class PixelAdventure extends FlameGame
     if (isLoadingLevel) return;
 
     isLoadingLevel = true;
+
+    isGameWon = false;
+    isGameOver = false;
+    hud.hideStatusMessage();
 
     // Verifica se há mais níveis
     if (currentLevelIndex < levelNames.length - 1) {
@@ -244,16 +252,26 @@ class PixelAdventure extends FlameGame
 
     currentLevel = newWorld;
 
-    // Configura nova câmera
-    cam = CameraComponent.withFixedResolution(
-      world: newWorld,
-      width: 640,
-      height: 360,
-    );
+    if (levelNames[currentLevelIndex] == 'Level-01') {
+      cam = CameraComponent.withFixedResolution(
+        world: newWorld,
+        width: 640,
+        height: 368,
+      );
+    } else {
+      cam = CameraComponent.withFixedResolution(
+        world: newWorld,
+        width: 480,
+        height: 320,
+      );
+    }
+
     cam.viewfinder.anchor = Anchor.topLeft;
 
-    // Adiciona os novos componentes
     addAll([cam, newWorld]);
+
+    hud = HUD();
+    cam.viewport.add(hud);
 
     isLoadingLevel = false;
   }
@@ -273,6 +291,10 @@ class PixelAdventure extends FlameGame
     if (isLoadingLevel) return;
 
     isLoadingLevel = true;
+
+    isGameOver = false;
+    isGameWon = false;
+
     _loadLevelWithCleanup();
   }
 
@@ -330,13 +352,16 @@ class PixelAdventure extends FlameGame
       //   world: world,
       // ); //camera pega a tela inteira
 
-      cam.viewfinder.anchor = Anchor.topLeft; // Âncora no canto superior esquerdo
+      cam.viewfinder.anchor =
+          Anchor.topLeft; // Âncora no canto superior esquerdo
 
       // cam.viewport = MaxViewport(); // Usa toda a tela do dispositivo
 
       // Adiciona a câmera e o mundo ao jogo
       addAll([cam, world]);
-      cam.viewport.add(HUD());
+
+      hud = HUD();
+      cam.viewport.add(hud);
 
       isLoadingLevel = false;
     });
