@@ -152,8 +152,6 @@ class PixelAdventure extends FlameGame
 
       checkGameStatus();
     }
-
-    
   }
 
   void loseLifeEnemy() {
