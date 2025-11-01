@@ -6,10 +6,10 @@ import 'package:flame_tiled/flame_tiled.dart'; // Para carregar mapas Tiled
 import 'package:pixel_adventure/components/background_tile.dart';
 import 'package:pixel_adventure/components/checkpoint.dart';
 import 'package:pixel_adventure/components/chicken.dart';
+import 'package:pixel_adventure/components/hud.dart';
 import 'package:pixel_adventure/components/rino.dart';
 import 'package:pixel_adventure/components/collision_block.dart';
 import 'package:pixel_adventure/components/fruit.dart';
-import 'package:pixel_adventure/components/hud.dart';
 import 'package:pixel_adventure/components/gold.dart';
 import 'package:pixel_adventure/components/goose.dart';
 import 'package:pixel_adventure/components/player.dart';

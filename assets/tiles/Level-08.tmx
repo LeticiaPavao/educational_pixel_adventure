@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="68">
- <tileset firstgid="1" name="Beach_Tiles" tilewidth="16" tileheight="16" tilecount="648" columns="18">
-  <image source="../images/Terrain/Beach_Tiles.png" width="288" height="576"/>
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="68">
+ <tileset firstgid="1" name="Beach_Tiles" tilewidth="16" tileheight="16" tilecount="340" columns="34">
+  <image source="../images/Terrain/Beach_Tiles.png" width="544" height="160"/>
  </tileset>
- <tileset firstgid="649" name="Terrain (16x16)" tilewidth="16" tileheight="16" tilecount="242" columns="22">
+ <tileset firstgid="542" name="Terrain (16x16)" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
- <tileset firstgid="891" name="Static_Objects" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
-  <image source="../images/Terrain/Static_Objects.png" width="512" height="512"/>
+ <tileset firstgid="784" name="Static_Objects" tilewidth="16" tileheight="16" tilecount="162" columns="18">
+  <image source="../images/Terrain/Static_Objects.png" width="288" height="144"/>
  </tileset>
- <tileset firstgid="1915" name="Dungeon Tile Set" tilewidth="16" tileheight="16" tilecount="4096" columns="64">
-  <image source="../images/Terrain/Dungeon Tile Set.png" width="1024" height="1024"/>
+ <tileset firstgid="946" name="Dungeon Tile Set" tilewidth="16" tileheight="16" tilecount="270" columns="15">
+  <image source="../images/Terrain/Dungeon Tile Set.png" width="240" height="288"/>
  </tileset>
- <tileset firstgid="6011" name="Static_Objects" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
-  <image source="../images/Terrain/Static_Objects.png" width="512" height="512"/>
+ <tileset firstgid="2864" name="Static_Objects" tilewidth="16" tileheight="16" tilecount="162" columns="18">
+  <image source="../images/Terrain/Static_Objects.png" width="288" height="144"/>
  </tileset>
- <tileset firstgid="7035" name="Dungeon Tile Set" tilewidth="16" tileheight="16" tilecount="4096" columns="64">
-  <image source="../images/Terrain/Dungeon Tile Set.png" width="1024" height="1024"/>
+ <tileset firstgid="3026" name="Dungeon Tile Set" tilewidth="16" tileheight="16" tilecount="270" columns="15">
+  <image source="../images/Terrain/Dungeon Tile Set.png" width="240" height="288"/>
  </tileset>
- <tileset firstgid="11131" name="Terrain (16x16)" tilewidth="16" tileheight="16" tilecount="242" columns="22">
+ <tileset firstgid="6591" name="Terrain (16x16)" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
  <layer id="1" name="Background" width="30" height="20">
   <data encoding="csv">
-11342,11320,11321,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,650,11319,11320,11343,
-11344,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11344,
-11366,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11366,
-671,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,673,
-671,411,414,0,0,0,0,0,0,0,0,0,0,217,222,0,0,217,222,0,0,0,0,0,0,0,0,0,0,673,
-671,429,432,0,0,771,0,0,409,225,414,0,0,307,310,310,310,310,312,0,0,0,771,0,0,8821,8822,8823,8824,673,
-671,0,0,0,0,0,0,0,427,358,432,0,0,0,0,0,0,0,0,0,0,0,0,394,395,8885,8886,8887,8888,673,
-671,0,0,0,0,0,0,0,0,376,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10407,9450,3830,3831,3832,673,
-671,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,541,0,0,0,0,0,0,10471,9141,9142,9143,9144,673,
-671,220,413,414,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,749,750,751,10535,9205,9206,9207,9208,673,
-671,431,431,432,0,0,0,0,0,0,0,0,0,0,0,394,395,396,0,0,0,0,0,0,10599,9375,9376,9377,9378,673,
-671,0,0,0,0,749,751,0,0,0,0,0,0,0,0,0,0,749,750,751,0,0,0,0,10535,9439,9440,9441,9442,673,
-671,0,0,0,0,0,0,0,409,410,411,412,413,414,0,0,0,0,0,0,0,0,0,0,10599,9503,9504,9505,9506,673,
-671,0,0,0,0,0,0,0,427,428,429,430,431,432,0,0,0,0,0,0,0,0,0,0,10599,9567,9568,9569,9570,673,
-671,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,217,218,219,220,221,221,673,
-671,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,235,236,237,238,239,239,673,
-671,0,0,0,0,0,0,0,0,0,11134,11175,11135,0,0,0,0,11134,11177,11135,0,0,0,253,254,255,256,257,257,673,
-11327,0,0,0,0,0,0,0,0,0,11133,11131,11132,11132,11132,11132,11132,11132,11133,11131,0,0,0,271,272,273,274,275,275,11327,
-11349,0,0,0,0,0,0,0,0,0,11134,11153,0,0,0,0,0,0,11155,11135,0,0,0,289,290,291,292,293,293,11349,
-11369,11325,11326,694,694,694,694,694,694,694,11177,11175,694,694,694,694,694,694,11177,11175,694,694,694,694,694,694,694,11324,11325,11370
+6802,6780,6781,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,543,6779,6780,6803,
+6804,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6804,
+6826,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6826,
+564,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,566,
+564,411,414,0,0,0,0,0,0,0,0,0,0,217,222,0,0,217,222,0,0,0,0,0,0,0,0,0,0,566,
+564,429,432,0,0,664,0,0,409,225,414,0,0,307,310,310,310,310,312,0,0,0,664,0,0,4812,4813,4814,4815,566,
+564,0,0,0,0,0,0,0,427,358,432,0,0,0,0,0,0,0,0,0,0,0,0,394,395,4876,4877,4878,4879,566,
+564,0,0,0,0,0,0,0,0,376,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6398,5441,2861,2862,2863,566,
+564,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,541,0,0,0,0,0,0,6462,5132,5133,5134,5135,566,
+564,220,413,414,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,642,643,644,6526,5196,5197,5198,5199,566,
+564,431,431,432,0,0,0,0,0,0,0,0,0,0,0,394,395,396,0,0,0,0,0,0,6590,5366,5367,5368,5369,566,
+564,0,0,0,0,642,644,0,0,0,0,0,0,0,0,0,0,642,643,644,0,0,0,0,6526,5430,5431,5432,5433,566,
+564,0,0,0,0,0,0,0,409,410,411,412,413,414,0,0,0,0,0,0,0,0,0,0,6590,5494,5495,5496,5497,566,
+564,0,0,0,0,0,0,0,427,428,429,430,431,432,0,0,0,0,0,0,0,0,0,0,6590,5558,5559,5560,5561,566,
+564,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,217,218,219,220,221,221,566,
+564,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,235,236,237,238,239,239,566,
+564,0,0,0,0,0,0,0,0,0,6594,6635,6595,0,0,0,0,6594,6637,6595,0,0,0,253,254,255,256,257,257,566,
+6787,0,0,0,0,0,0,0,0,0,6593,6591,6592,6592,6592,6592,6592,6592,6593,6591,0,0,0,271,272,273,274,275,275,6787,
+6809,0,0,0,0,0,0,0,0,0,6594,6613,0,0,0,0,0,0,6615,6595,0,0,0,289,290,291,292,293,293,6809,
+6829,6785,6786,587,587,587,587,587,587,587,6637,6635,587,587,587,587,587,587,6637,6635,587,587,587,587,587,587,587,6784,6785,6830
 </data>
  </layer>
  <objectgroup id="7" name="Collisions">
@@ -78,7 +78,7 @@
   <object id="19" name="Apple" type="Fruit" x="265.002" y="21.7134" width="34" height="32.6667"/>
   <object id="21" name="Melon" type="Fruit" x="70.3333" y="54.3333" width="34" height="32.6667"/>
   <object id="24" name="Player" type="Player" x="12.6978" y="101.333" width="46.6667" height="47.3333"/>
-  <object id="26" type="Checkpoint" x="8.82217" y="17.3399" width="46.6667" height="47.3333"/>
+  <object id="26" type="Checkpoint" x="16.9716" y="17.3399" width="46.6667" height="47.3333"/>
   <object id="51" type="Saw" x="239.436" y="65.962" width="32" height="31">
    <properties>
     <property name="isVertical" type="bool" value="false"/>

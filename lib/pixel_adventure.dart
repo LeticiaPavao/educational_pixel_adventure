@@ -57,7 +57,7 @@ class PixelAdventure extends FlameGame
   bool isGameWon = false; // Indica se o jogo foi vencido
 
   // Lista com os nomes dos níveis do jogo
-  List<String> levelNames = ['Level-08','Level-01', 'Level-03', 'Level-07'];
+  List<String> levelNames = ['Level-01', 'Level-03', 'Level-07'];
   int currentLevelIndex = 0; // Índice do nível atual
 
   bool isLoadingLevel = false; // Indica se um nível está sendo carregado
@@ -148,12 +148,11 @@ class PixelAdventure extends FlameGame
 
   void loseLife() {
     if (lives > 0 && !isGameOver) {
-      lives -= 1; // Remove uma vida
+      lives -= 1; 
     }
 
     if (lives <= 0) {
-      lives = 0; // Garante que as vidas não fiquem negativas
-
+      lives = 0; 
       isGameOver = true;
 
       //checkGameStatus();
@@ -196,7 +195,6 @@ class PixelAdventure extends FlameGame
 
     isGameWon = false;
     isGameOver = false;
-    hud.hideStatusMessage();
 
     // Verifica se há mais níveis
     if (currentLevelIndex < levelNames.length - 1) {
@@ -206,6 +204,7 @@ class PixelAdventure extends FlameGame
       // Se não houver mais níveis, marca vitória e reinicia
       if (!isGameWon) {
         isGameWon = true;
+        hud.showGameOverlay(hud.gameWonSprite);
       }
       // Opcional: reiniciar o jogo ou voltar ao primeiro nível
       currentLevelIndex = 0;
@@ -360,8 +359,8 @@ class PixelAdventure extends FlameGame
       // Adiciona a câmera e o mundo ao jogo
       addAll([cam, world]);
 
-      hud = HUD();
-      cam.viewport.add(hud);
+      // hud = HUD();
+      // cam.viewport.add(hud);
 
       isLoadingLevel = false;
     });

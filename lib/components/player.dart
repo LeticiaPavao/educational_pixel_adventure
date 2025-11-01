@@ -158,7 +158,8 @@ class Player extends SpriteAnimationGroupComponent
         _respawn(); // Morre para serra
       }
       if (other is Chicken) {
-        other.collidedWithPlayer(); // Interage com galinha
+        game.loseLife(); // Perde vida
+        _respawn(); // Morre para serra
       }
       if (other is Bat) {
         other.collidedWithPlayer(); // Interage com morcego
@@ -174,7 +175,8 @@ class Player extends SpriteAnimationGroupComponent
         game.addScore(5); // Adiciona 5 pontos
       }
       if (other is Rino) {
-        other.collidedWithPlayer(); // Interage com rinoceronte
+        game.loseLife(); // Perde vida
+        _respawn(); // Morre para serra
       }
       if (other is Goose) {
         other.collidedWithPlayer(); // Interage com ganso
